@@ -8,9 +8,8 @@ import 'package:path_provider/path_provider.dart';
 class DownloadController extends GetxController {
 
   var isLoading = true.obs;
-
-  static const imgUrl = 'http://212.183.159.230/20MB.zip';
   var dio = Dio();
+  static const databaseUrl = 'https://github.com/imamhossain94/medicinedb/blob/main/medicine.db';
 
 
   @override
@@ -22,16 +21,16 @@ class DownloadController extends GetxController {
 
   void downloadFile() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    String appDocPath = appDocDir.path + "/video.mp4'";
+    String appDocPath = appDocDir.path + "/medicine.db";
 
     print(appDocPath);
 
-    download2(dio, imgUrl, appDocPath);
+    download2(databaseUrl, appDocPath);
 
   }
 
 
-  Future download2(Dio dio, String url, String savePath) async {
+  Future download2(String url, String savePath) async {
     try {
       dio_response.Response response = await dio.get(
         url,
