@@ -5,13 +5,15 @@ import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 
 
-const imgUrl = 'https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1920_18MG.mp4';
+const imgUrl = 'http://212.183.159.230/20MB.zip';
 
 var dio = Dio();
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

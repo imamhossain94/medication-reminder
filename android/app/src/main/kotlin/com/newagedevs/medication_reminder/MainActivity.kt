@@ -1,4 +1,4 @@
-package com.newagedevs.medication_reminder.medication_reminder
+package com.newagedevs.medication_reminder
 
 import io.flutter.embedding.android.FlutterActivity
 
