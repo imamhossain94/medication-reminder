@@ -18,8 +18,8 @@ dependencies:
   path_provider: ^2.0.9
   dio: ^4.0.4
 
-  webview_flutter: ^2.3.1
-  font_awesome_flutter: ^9.2.0
+  webview_flutter: ^3.0.2
+  font_awesome_flutter: ^10.1.0
   get: ^4.3.8
   get_storage: ^2.0.3
   intl: ^0.17.0
