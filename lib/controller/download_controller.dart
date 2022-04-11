@@ -3,26 +3,38 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as dio_response;
 import 'package:get/get.dart';
+import 'package:medication_reminder/ui/pages/home_page.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DownloadController extends GetxController {
-
-  var isDownloading = true.obs;
+  var isDownloading = false.obs;
   var dio = Dio();
   var totalDownload = 0.0.obs;
 
   @override
   void onInit() {
     super.onInit();
-    downloadFile();
+    checkDatabase();
   }
 
+  void checkDatabase() async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, "medicine.db");
+    final exists = await databaseExists(path);
+    if(exists){
+      await Future.delayed(const Duration(seconds: 2), () {
+        navigateScreen();
+      });
+    }else{
+      downloadFile();
+    }
+  }
 
   Future downloadFile() async {
-
-    String url = 'https://firebasestorage.googleapis.com/v0/b/universal-a4a51.appspot.com/o/medication_reminder%2Fmedicine.db?alt=media&token=7783db6c-b692-46e2-beb5-b3f62918f6d0';//';
+    String url =
+        'https://firebasestorage.googleapis.com/v0/b/universal-a4a51.appspot.com/o/medication_reminder%2Fmedicine.db?alt=media&token=7783db6c-b692-46e2-beb5-b3f62918f6d0'; //';
     Directory appDocDir = await getApplicationDocumentsDirectory();
     String savePath = appDocDir.path + "/medicine.db";
 
@@ -32,7 +44,7 @@ class DownloadController extends GetxController {
         url,
         onReceiveProgress: (received, total) {
           if (total != -1) {
-            totalDownload.value = (received/total);
+            totalDownload.value = (received / total);
           }
         },
         options: Options(
@@ -54,49 +66,34 @@ class DownloadController extends GetxController {
     }
   }
 
-
-  void importData(String downloadedDbPath) async{
+  void importData(String downloadedDbPath) async {
     // Check if we have an existing copy first
-    print('in----------------');
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, "medicine.db");
     final exists = await databaseExists(path);
+
     if (!exists) {
       try {
-
         File file = File(downloadedDbPath);
-
         await file.exists();
 
-        try{
+        try {
           file.copy(path).then((value) {
-            print('file saved--------------$value');
+            navigateScreen();
           });
-        }catch (err) {
-          print('fe--------------$err');
-        }
-
-
-        var db = await openDatabase(path);
-
-        var result = await db.rawQuery("SELECT * FROM brand WHERE brand_name = napa");
-
-        print(result);
-
+        } catch (_) {}
       } catch (e) {
         isDownloading(false);
-        print('error----------------$e');
       }
-    }else{
-      print('what---------------------');
-      var db = await openDatabase(path);
-      var result = await db.rawQuery("SELECT * FROM brand WHERE brand_name = 'Napa'");
-
-      print(result);
+    } else {
+      // var db = await openDatabase(path);
+      // var result = await db.rawQuery("SELECT * FROM brand WHERE brand_name = 'Napa'");
+      navigateScreen();
     }
     isDownloading(false);
   }
 
-
+  void navigateScreen() {
+    Get.to(HomePage());
+  }
 }
-

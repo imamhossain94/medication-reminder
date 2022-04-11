@@ -42,3 +42,8 @@ SystemUiOverlayStyle mainPageSystemOverlay (Brightness brightness)=> SystemUiOve
   statusBarBrightness: brightness,
   statusBarIconBrightness: brightness,
 );
+
+enum viewMode {
+  list,
+  grid
+}

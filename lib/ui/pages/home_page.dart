@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:share/share.dart';
 
 import '../../controller/home_controller.dart';
 import '../../utils/constants.dart';
@@ -41,17 +40,27 @@ class HomePage extends StatelessWidget {
             actions: [
               IconButton(
                   onPressed: () {
-                    Share.share('Hey check out this android app $appLink');
+                    controller.toggleViewMode();
                   },
-                  icon: const Icon(
-                    FontAwesomeIcons.shareNodes,
-                    size: 22,
-                  ))
+                  icon: Obx(() => Icon(
+                        controller.view.value == viewMode.list
+                            ? FontAwesomeIcons.tableList
+                            : FontAwesomeIcons.tableCellsLarge,
+                        size: 22,
+                      )))
             ],
           ),
           drawerScrimColor: Colors.transparent,
-          body: const Center(child: CircularProgressIndicator()),
           drawer: const MainDrawer(),
+          body: const Center(child: CircularProgressIndicator()),
+          floatingActionButton: FloatingActionButton(
+            child: const Icon(
+              Icons.add,
+              size: 40,
+              color: Colors.white,
+            ),
+            onPressed: () {},
+          ),
         ),
       ),
     );
