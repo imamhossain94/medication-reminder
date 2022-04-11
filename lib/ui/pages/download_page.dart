@@ -4,13 +4,13 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
-import '../../controller/home_controller.dart';
+import '../../controller/controller.dart';
 import '../../utils/constants.dart';
 
 class DownloadingPage extends StatelessWidget {
   DownloadingPage({Key? key}) : super(key: key);
 
-  final controller = Get.put(HomeController());
+  final controller = Get.put(DownloadController());
 
   @override
   Widget build(BuildContext context) {
@@ -56,16 +56,16 @@ class DownloadingPage extends StatelessWidget {
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: LinearPercentIndicator(
+                    child: Obx(()=>LinearPercentIndicator(
                       //width: MediaQuery.of(context).size.width - 50,
-                      animation: true,
+                      //animation: true,
                       lineHeight: 20.0,
-                      animationDuration: 2000,
-                      percent: 0.9,
-                      center: const Text("90.0%", style: TextStyle(color: Colors.white),),
+                      //animationDuration: 2000,
+                      percent: controller.totalDownload.value,
+                      center: Text(( controller.totalDownload.value * 100).toStringAsFixed(0) + "%", style: TextStyle(color: Colors.white),),
                       barRadius: const Radius.circular(10),
                       progressColor: const Color(0xFF173D7A),
-                    ),
+                    )),
                   ),
 
                   Text(

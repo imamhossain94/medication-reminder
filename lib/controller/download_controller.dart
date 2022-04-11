@@ -7,35 +7,35 @@ import 'package:path_provider/path_provider.dart';
 
 class DownloadController extends GetxController {
 
-  var isLoading = true.obs;
+  var isDownloading = true.obs;
   var dio = Dio();
-  static const databaseUrl = 'https://github.com/imamhossain94/medicinedb/blob/main/medicine.db';
-
+  var totalDownload = 0.0.obs;
 
   @override
   void onInit() {
     super.onInit();
-
-
+    downloadFile();
   }
 
-  void downloadFile() async {
+
+  Future downloadFile() async {
+
+    String url = 'https://firebasestorage.googleapis.com/v0/b/universal-a4a51.appspot.com/o/medication_reminder%2Fmedicine.db?alt=media&token=7783db6c-b692-46e2-beb5-b3f62918f6d0';//';
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    String appDocPath = appDocDir.path + "/medicine.db";
-
-    print(appDocPath);
-
-    download2(databaseUrl, appDocPath);
-
-  }
+    String savePath = appDocDir.path + "/medicine.db";
 
 
-  Future download2(String url, String savePath) async {
     try {
+      isDownloading(true);
       dio_response.Response response = await dio.get(
         url,
-        onReceiveProgress: showDownloadProgress,
-        //Received data with List<int>
+        onReceiveProgress: (received, total) {
+          if (total != -1) {
+            // print((received / total * 100).toStringAsFixed(0) + "%");
+            // print("Downloaded: ${received/total}");
+            totalDownload.value = (received/total);
+          }
+        },
         options: Options(
             responseType: ResponseType.bytes,
             followRedirects: false,
@@ -43,24 +43,19 @@ class DownloadController extends GetxController {
               return status! < 500;
             }),
       );
-      print(response.headers);
+      // print(response.headers);
       File file = File(savePath);
       var raf = file.openSync(mode: FileMode.write);
-      // response.data is List<int> type
       raf.writeFromSync(response.data);
       await raf.close();
+      // print(await File(savePath).exists());
+
+      isDownloading(false);
     } catch (e) {
-      print(e);
+      // print(e);
+      isDownloading(false);
     }
   }
-
-  void showDownloadProgress(received, total) {
-    if (total != -1) {
-      print((received / total * 100).toStringAsFixed(0) + "%");
-    }
-  }
-
-
 
 }
 
