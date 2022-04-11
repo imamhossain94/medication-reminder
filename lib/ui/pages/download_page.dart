@@ -28,12 +28,17 @@ class DownloadingPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Lottie.network(
-                    'https://assets7.lottiefiles.com/packages/lf20_7k8jk8vi.json',
+                  Image.asset(
+                    'assets/database.gif',
+                    //height: 100,
                     width: double.infinity,
-                    //height: 200,
-                    fit: BoxFit.fill,
                   ),
+                  // Lottie.network(
+                  //   'https://assets7.lottiefiles.com/packages/lf20_7k8jk8vi.json',
+                  //   width: double.infinity,
+                  //   //height: 200,
+                  //   fit: BoxFit.fill,
+                  // ),
                   //const SizedBox(height: 50,),
                   Text(
                     appName.replaceAll(' ', ' '),
