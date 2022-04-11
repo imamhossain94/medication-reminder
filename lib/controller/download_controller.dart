@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as dio_response;
 import 'package:get/get.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DownloadController extends GetxController {
 
@@ -56,6 +58,33 @@ class DownloadController extends GetxController {
       isDownloading(false);
     }
   }
+
+
+
+
+  void importData() async{
+    // Check if we have an existing copy first
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, "demo_asset_example.db");
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 
