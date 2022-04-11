@@ -26,15 +26,12 @@ class DownloadController extends GetxController {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     String savePath = appDocDir.path + "/medicine.db";
 
-
     try {
       isDownloading(true);
       dio_response.Response response = await dio.get(
         url,
         onReceiveProgress: (received, total) {
           if (total != -1) {
-            // print((received / total * 100).toStringAsFixed(0) + "%");
-            // print("Downloaded: ${received/total}");
             totalDownload.value = (received/total);
           }
         },
@@ -45,45 +42,60 @@ class DownloadController extends GetxController {
               return status! < 500;
             }),
       );
-      // print(response.headers);
+
       File file = File(savePath);
       var raf = file.openSync(mode: FileMode.write);
       raf.writeFromSync(response.data);
       await raf.close();
-      // print(await File(savePath).exists());
 
-      isDownloading(false);
+      importData(savePath);
     } catch (e) {
-      // print(e);
       isDownloading(false);
     }
   }
 
 
-
-
-  void importData() async{
+  void importData(String downloadedDbPath) async{
     // Check if we have an existing copy first
+    print('in----------------');
     var databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, "demo_asset_example.db");
+    String path = join(databasesPath, "medicine.db");
+    final exists = await databaseExists(path);
+    if (!exists) {
+      try {
+
+        File file = File(downloadedDbPath);
+
+        await file.exists();
+
+        try{
+          file.copy(path).then((value) {
+            print('file saved--------------$value');
+          });
+        }catch (err) {
+          print('fe--------------$err');
+        }
 
 
+        var db = await openDatabase(path);
 
+        var result = await db.rawQuery("SELECT * FROM brand WHERE brand_name = napa");
+
+        print(result);
+
+      } catch (e) {
+        isDownloading(false);
+        print('error----------------$e');
+      }
+    }else{
+      print('what---------------------');
+      var db = await openDatabase(path);
+      var result = await db.rawQuery("SELECT * FROM brand WHERE brand_name = 'Napa'");
+
+      print(result);
+    }
+    isDownloading(false);
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
