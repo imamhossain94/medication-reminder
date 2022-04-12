@@ -41,21 +41,21 @@ class MainDrawer extends StatelessWidget {
                   ),
                   const Divider(),
                   DrawerItem(
-                      icon: const Icon(FontAwesomeIcons.solidStar, color: Color(0xFFF5365C),),
+                      icon: const Icon(FontAwesomeIcons.solidStar, color: Color(0xFF172B4D),),
                       text: 'Rate The App',
                       onTap: () {
                         Get.back();
                         showRatingDialogue(context);
                       }),
                   DrawerItem(
-                      icon: const Icon(FontAwesomeIcons.shareAlt, color: Color(0xFF11CDEF),),
+                      icon: const Icon(FontAwesomeIcons.shareAlt, color: Color(0xFF172B4D),),
                       text: 'Share',
                       onTap: () {
                         Get.back();
                         Share.share('Hey check out this android app $appLink');
                       }),
                   DrawerItem(
-                      icon: const Icon(FontAwesomeIcons.googlePlay, color: Color(0xFFFCB840),),
+                      icon: const Icon(FontAwesomeIcons.googlePlay, color: Color(0xFF172B4D),),
                       text: 'Other Apps',
                       onTap: () async{
                         String url = storeLink;
@@ -67,7 +67,7 @@ class MainDrawer extends StatelessWidget {
                       }),
                   const Divider(),
                   DrawerItem(
-                      icon: const Icon(FontAwesomeIcons.solidAddressCard, color: Color(0xFF5E72E4),),
+                      icon: const Icon(FontAwesomeIcons.solidAddressCard, color: Color(0xFF172B4D),),
                       text: 'Contact',
                       onTap: () async {
                         String url = contactMail;
@@ -78,7 +78,7 @@ class MainDrawer extends StatelessWidget {
                         }
                       }),
                   DrawerItem(
-                      icon: const Icon(FontAwesomeIcons.shieldAlt, color: Color(0xFF2DCE89),),
+                      icon: const Icon(FontAwesomeIcons.shieldAlt, color: Color(0xFF172B4D),),
                       text: 'Privacy Policy',
                       onTap: () async {
                         Get.back();

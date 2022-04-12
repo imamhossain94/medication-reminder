@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:medication_reminder/ui/pages/medicine_db_page.dart';
 
 import '../../controller/home_controller.dart';
 import '../../utils/constants.dart';
@@ -54,12 +55,15 @@ class HomePage extends StatelessWidget {
           drawer: const MainDrawer(),
           body: const Center(child: CircularProgressIndicator()),
           floatingActionButton: FloatingActionButton(
+            backgroundColor: const Color(0xFF172B4D),
             child: const Icon(
               Icons.add,
               size: 40,
               color: Colors.white,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Get.to(()=> MedicineDbPage());
+            },
           ),
         ),
       ),

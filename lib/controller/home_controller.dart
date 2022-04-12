@@ -4,24 +4,17 @@ import 'package:medication_reminder/utils/constants.dart';
 
 
 class HomeController extends GetxController {
-  late TextEditingController searchTextController;
+
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
   var view = viewMode.list.obs;
   var isLoading = true.obs;
 
 
-
-  @override
-  void onInit() {
-    searchTextController = TextEditingController();
-
-    searchTextController.addListener(() {
-
-    });
-
-    super.onInit();
-  }
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  // }
 
   void openDrawer() {
     scaffoldKey.currentState?.openDrawer();
@@ -38,8 +31,6 @@ class HomeController extends GetxController {
       view.value = viewMode.list;
     }
   }
-
-
 
 }
 
