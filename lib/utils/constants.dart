@@ -47,3 +47,16 @@ enum viewMode {
   list,
   grid
 }
+
+// Assets path
+const bandageSvg = 'assets/form/bandage.svg';
+const bottleSvg = 'assets/form/bottle.svg';
+const capsuleSvg = 'assets/form/capsule.svg';
+const creamSvg = 'assets/form/cream.svg';
+const dropsSvg = 'assets/form/drops.svg';
+const injectionSvg = 'assets/form/injection.svg';
+const powderSvg = 'assets/form/powder.svg';
+const soapSvg = 'assets/form/soap.svg';
+const spraySvg = 'assets/form/spray.svg';
+const suppositorySvg = 'assets/form/suppository.svg';
+const tabletsSvg = 'assets/form/tablets.svg';
