@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'services/database_service.dart';
 import 'services/get_storage_service.dart';
 import 'services/theme_service.dart';
 import 'utils/themes.dart';
@@ -13,6 +14,7 @@ import 'utils/themes.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await DatabaseService().init();
   await GetStorage.init();
   setAppVersion();
 

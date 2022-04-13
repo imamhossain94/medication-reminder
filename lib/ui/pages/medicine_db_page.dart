@@ -4,18 +4,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../controller/controller.dart';
-import '../../controller/home_controller.dart';
 import '../../utils/constants.dart';
-import '../components/main_drawer.dart';
+import '../components/medicine_card.dart';
 
 class MedicineDbPage extends StatelessWidget {
   MedicineDbPage({Key? key}) : super(key: key);
 
+  final controller = Get.put(MedicineDbController(), permanent: false);
+
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(MedicineDbController(), permanent: false);
 
-    
+
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: mainPageSystemOverlay(Theme.of(context).brightness),
       child: SafeArea(
@@ -49,7 +50,17 @@ class MedicineDbPage extends StatelessWidget {
                   ))
             ],
           ),
-          body: const Center(child: CircularProgressIndicator()),
+          body: GetBuilder<MedicineDbController>(
+            init: controller,
+            global: false,
+            builder: (value) => ListView.builder(
+              controller: value.controller,
+              itemCount: value.medicineList.length,
+              itemBuilder: (context, index) {
+                return MedicineCard(medicine: value.medicineList[index]);
+              },
+            ),
+          ),
         ),
       ),
     );

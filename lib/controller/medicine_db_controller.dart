@@ -1,24 +1,29 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+
+import '../models/medicine.dart';
+import '../services/database_service.dart';
 
 
 class MedicineDbController extends GetxController {
-  late TextEditingController searchTextController;
   var isLoading = true.obs;
+
+  late TextEditingController searchTextController;
+  ScrollController controller = ScrollController();
+
+  List<Medicine> medicineList = [];
+  int listLength = 20;
+  int page = 0;
 
 
   @override
   void onInit() {
     searchTextController = TextEditingController();
-
     searchTextController.addListener(() {
 
     });
     fetchData();
+    addItems();
     super.onInit();
   }
 
@@ -29,12 +34,34 @@ class MedicineDbController extends GetxController {
   }
 
   void fetchData() async {
-    var databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, "medicine.db");
-    var db = await openDatabase(path);
-    var result = await db.rawQuery("SELECT * FROM brand WHERE brand_name = 'Napa' LIMIT 3");
-    print(result);
+    isLoading(true);
+    var result = await DatabaseService.database.rawQuery("SELECT * FROM brand LIMIT $listLength offset $page");
+
+    for (var element in result) {
+      medicineList.add(Medicine.fromJson(element));
+    }
+    isLoading(false);
+    update();
   }
+
+  addItems() async {
+    controller.addListener(() async{
+      if (controller.position.maxScrollExtent == controller.position.pixels) {
+        page += 20;
+        var result = await DatabaseService.database.rawQuery("SELECT * FROM brand LIMIT $listLength offset $page");
+        for (var element in result) {
+          medicineList.add(Medicine.fromJson(element));
+        }
+        update();
+      }
+      print(page);
+
+    });
+  }
+
+
+
+
 
 }
 

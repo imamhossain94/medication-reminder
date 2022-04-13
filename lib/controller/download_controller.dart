@@ -4,9 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as dio_response;
 import 'package:get/get.dart';
 import 'package:medication_reminder/ui/pages/home_page.dart';
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+
+import '../services/database_service.dart';
 
 class DownloadController extends GetxController {
   var isDownloading = false.obs;
@@ -20,9 +21,7 @@ class DownloadController extends GetxController {
   }
 
   void checkDatabase() async {
-    var databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, "medicine.db");
-    final exists = await databaseExists(path);
+    final exists = await databaseExists(DatabaseService.path);
     if(exists){
       await Future.delayed(const Duration(seconds: 2), () {
         navigateScreen();
@@ -68,9 +67,8 @@ class DownloadController extends GetxController {
 
   void importData(String downloadedDbPath) async {
     // Check if we have an existing copy first
-    var databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, "medicine.db");
-    final exists = await databaseExists(path);
+
+    final exists = await databaseExists(DatabaseService.path);
 
     if (!exists) {
       try {
@@ -78,7 +76,7 @@ class DownloadController extends GetxController {
         await file.exists();
 
         try {
-          file.copy(path).then((value) {
+          file.copy(DatabaseService.path).then((value) {
             navigateScreen();
           });
         } catch (_) {}
@@ -86,8 +84,6 @@ class DownloadController extends GetxController {
         isDownloading(false);
       }
     } else {
-      // var db = await openDatabase(path);
-      // var result = await db.rawQuery("SELECT * FROM brand WHERE brand_name = 'Napa'");
       navigateScreen();
     }
     isDownloading(false);

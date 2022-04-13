@@ -1,7 +1,7 @@
 class Medicine {
-  int? brandId;
-  int? genericId;
-  int? companyId;
+  String? brandId;
+  String? genericId;
+  String? companyId;
   String? brandName;
   String? form;
   String? strength;
