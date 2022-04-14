@@ -67,6 +67,21 @@ const tabletsSvg = 'assets/form/tablets.svg';
 const unknownSvg = 'assets/form/unknown.svg';
 const emptySvg = 'assets/form/empty.svg';
 
+// Medicine form map
+const medicineForms = [
+  {'name': 'Bandage', 'path': bandageSvg},
+  {'name': 'Suspension', 'path': bottleSvg},
+  {'name': 'Capsule', 'path': capsuleSvg},
+  {'name': 'Gel/Cream', 'path': creamSvg},
+  {'name': 'Drops', 'path': dropsSvg},
+  {'name': 'Injection', 'path': injectionSvg},
+  {'name': 'Powder', 'path': powderSvg},
+  {'name': 'Soap', 'path': soapSvg},
+  {'name': 'Inhaler/Spray', 'path': spraySvg},
+  {'name': 'Suppository', 'path': suppositorySvg},
+  {'name': 'Tablet', 'path': tabletsSvg},
+  {'name': 'Unspecified', 'path': unknownSvg},
+];
 
 // Form possibility
 class FormPossibility {
@@ -82,8 +97,21 @@ class FormPossibility {
   ];
   static const tablet = ['tablet', 'film'];
   static const capsule = 'cap';
-  static const injection = ['injection', 'saline', 'vaccine', 'infusion', 'kit'];
-  static const tube = ['gel', 'ointment', 'cream', 'paste', 'shampoo', 'lotion'];
+  static const injection = [
+    'injection',
+    'saline',
+    'vaccine',
+    'infusion',
+    'kit'
+  ];
+  static const tube = [
+    'gel',
+    'ointment',
+    'cream',
+    'paste',
+    'shampoo',
+    'lotion'
+  ];
   static const suppository = 'suppository';
   static const drops = 'drops';
   static const inhaler = ['inhalation', 'inhaler', 'spray'];
@@ -91,5 +119,3 @@ class FormPossibility {
   static const bandage = ['bandage', 'patch'];
   static const soap = 'bar';
 }
-
-
