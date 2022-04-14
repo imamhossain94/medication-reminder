@@ -64,18 +64,34 @@ class MedicineDbPage extends StatelessWidget {
           body: GetBuilder<MedicineDbController>(
             init: controller,
             global: false,
-            builder: (value) => ListView.builder(
-              controller: value.controller,
-              itemCount: value.medicineList.length,
-              itemBuilder: (context, index) {
-                return MedicineCard(
-                  medicine: value.medicineList[index],
-                  onTap: () {
+            builder: (value) {
 
+              if(value.medicineList.isEmpty){
+                return Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Empty'),
+                    ],
+                  ),
+                );
+              }else{
+                return ListView.builder(
+                  controller: value.controller,
+                  itemCount: value.medicineList.length,
+                  itemBuilder: (context, index) {
+                    return MedicineCard(
+                      medicine: value.medicineList[index],
+                      onTap: () {
+
+                      },
+                    );
                   },
                 );
-              },
-            ),
+              }
+
+            },
           ),
         ),
       ),

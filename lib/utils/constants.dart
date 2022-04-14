@@ -65,6 +65,7 @@ const spraySvg = 'assets/form/spray.svg';
 const suppositorySvg = 'assets/form/suppository.svg';
 const tabletsSvg = 'assets/form/tablets.svg';
 const unknownSvg = 'assets/form/unknown.svg';
+const emptySvg = 'assets/form/empty.svg';
 
 
 // Form possibility
