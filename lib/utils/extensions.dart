@@ -2,9 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'constants.dart';
 
@@ -147,6 +149,26 @@ Widget aboutDialogueItem(String title, String description) {
             fontSize: 14,
             color: Colors.black54,
           ),)
+      ],
+    ),
+  );
+}
+
+Widget emptyScreen(String message) {
+  return Center(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SvgPicture.asset(
+            emptySvg,
+            height: 80,
+            width: 80,
+            color: const Color(0xFF172B4D),
+            semanticsLabel: 'Open Pill'
+        ),
+        const SizedBox(height: 30,),
+        Text(message, style: TextStyle(fontSize: 11.sp),),
       ],
     ),
   );

@@ -6,6 +6,7 @@ import 'package:medication_reminder/ui/pages/medicine_db_page.dart';
 
 import '../../controller/home_controller.dart';
 import '../../utils/constants.dart';
+import '../../utils/extensions.dart';
 import '../components/main_drawer.dart';
 
 class HomePage extends StatelessWidget {
@@ -53,7 +54,25 @@ class HomePage extends StatelessWidget {
           ),
           drawerScrimColor: Colors.transparent,
           drawer: const MainDrawer(),
-          body: const Center(child: CircularProgressIndicator()),
+          body: GetBuilder<HomeController>(
+            init: controller,
+            global: false,
+            builder: (value) {
+
+              if(value.reminderList.isEmpty){
+                return emptyScreen('No Medicine Found');
+              }else{
+                return ListView.builder(
+                  controller: value.controller,
+                  itemCount: value.reminderList.length,
+                  itemBuilder: (context, index) {
+                    return const Text('Hello');
+                  },
+                );
+              }
+
+            },
+          ),
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color(0xFF172B4D),
             child: const Icon(

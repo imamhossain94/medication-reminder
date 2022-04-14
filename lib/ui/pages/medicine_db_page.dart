@@ -1,11 +1,14 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:medication_reminder/utils/extensions.dart';
 
 import '../../controller/controller.dart';
 import '../../utils/constants.dart';
 import '../components/medicine_card.dart';
+import 'new_reminder_page.dart';
 
 class MedicineDbPage extends StatelessWidget {
   MedicineDbPage({Key? key}) : super(key: key);
@@ -61,37 +64,72 @@ class MedicineDbPage extends StatelessWidget {
                       )))
             ],
           ),
-          body: GetBuilder<MedicineDbController>(
-            init: controller,
-            global: false,
-            builder: (value) {
+          body: Column(
+            children: [
+              Expanded(child: GetBuilder<MedicineDbController>(
+                init: controller,
+                global: false,
+                builder: (value) {
 
-              if(value.medicineList.isEmpty){
-                return Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Empty'),
-                    ],
-                  ),
-                );
-              }else{
-                return ListView.builder(
-                  controller: value.controller,
-                  itemCount: value.medicineList.length,
-                  itemBuilder: (context, index) {
-                    return MedicineCard(
-                      medicine: value.medicineList[index],
-                      onTap: () {
-
+                  if(value.medicineList.isEmpty){
+                    return emptyScreen('No Medicine Found');
+                  }else{
+                    return ListView.builder(
+                      controller: value.controller,
+                      itemCount: value.medicineList.length,
+                      itemBuilder: (context, index) {
+                        return MedicineCard(
+                          medicine: value.medicineList[index],
+                          onTap: () {
+                            controller.pickedMedicine = value.medicineList[index];
+                            Get.to(()=> NewReminderPage());
+                          },
+                        );
                       },
                     );
-                  },
-                );
-              }
+                  }
 
-            },
+                },
+              )),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Click on a medicine to continue',
+                        style: Theme.of(context).textTheme.headline6!.copyWith(
+                            color: const Color(0xFF172B4D)
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' or ',
+                        style: Theme.of(context).textTheme.bodyText2!,
+                      ),
+                      TextSpan(
+                        text: 'If you did not find your desire meds then click on',
+                        style: Theme.of(context).textTheme.headline6!.copyWith(
+                            color: const Color(0xFF172B4D)
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' here...',
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                          color: Colors.blueAccent
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            controller.pickedMedicine = null;
+                            Get.to(()=> NewReminderPage());
+                        }
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

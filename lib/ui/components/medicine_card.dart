@@ -38,7 +38,7 @@ class MedicineCard extends StatelessWidget {
                       height: 30,
                       width: 30,
                       color: Colors.white,
-                      semanticsLabel: 'A red up arrow'),
+                      semanticsLabel: medicine.form),
                 ),
                 const SizedBox(
                   width: 15,

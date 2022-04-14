@@ -6,9 +6,12 @@ import 'package:medication_reminder/utils/constants.dart';
 class HomeController extends GetxController {
 
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  ScrollController controller = ScrollController();
 
   var view = viewMode.list.obs;
   var isLoading = true.obs;
+
+  List<String> reminderList = [];
 
 
   // @override

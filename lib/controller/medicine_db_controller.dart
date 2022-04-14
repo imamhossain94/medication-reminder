@@ -17,6 +17,7 @@ class MedicineDbController extends GetxController {
   int page = 0;
   String searchKey = '';
 
+  Medicine? pickedMedicine;
 
   @override
   void onInit() {
