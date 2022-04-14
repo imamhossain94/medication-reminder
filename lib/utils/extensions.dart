@@ -1,12 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'constants.dart';
 
@@ -15,6 +13,64 @@ String generateRandomString(int len) {
   var r = Random();
   const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
   return List.generate(len, (index) => _chars[r.nextInt(_chars.length)]).join();
+}
+
+
+String formToSvgAssetsPath(String form) {
+
+  // capsule 1
+  if(form.contains(FormPossibility.capsule)) return capsuleSvg;
+  // suppository 1
+  if(form.contains(FormPossibility.suppository)) return suppositorySvg;
+  // drops 1
+  if(form.contains(FormPossibility.drops)) return dropsSvg;
+  // soap 1
+  if(form.contains(FormPossibility.soap)) return soapSvg;
+
+  // Tablet 2
+  for (var element in FormPossibility.tablet) {
+    if(form.contains(element)){
+      return tabletsSvg;
+    }
+  }
+  // powder 2
+  for (var element in FormPossibility.powder) {
+    if(form.contains(element)){
+      return bandageSvg;
+    }
+  }
+  // bandage 2
+  for (var element in FormPossibility.bandage) {
+    if(form.contains(element)){
+      return bandageSvg;
+    }
+  }
+  // inhaler 3
+  for (var element in FormPossibility.inhaler) {
+    if(form.contains(element)){
+      return bandageSvg;
+    }
+  }
+  // injection 5
+  for (var element in FormPossibility.injection) {
+    if(form.contains(element)){
+      return injectionSvg;
+    }
+  }
+  //tube 6
+  for (var element in FormPossibility.tube) {
+    if(form.contains(element)){
+      return creamSvg;
+    }
+  }
+  // Bottle 8
+  for (var element in FormPossibility.bottle) {
+    if(form.contains(element)){
+      return bottleSvg;
+    }
+  }
+
+  return unknownSvg;
 }
 
 

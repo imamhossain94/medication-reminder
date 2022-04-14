@@ -7,6 +7,7 @@ import '../services/database_service.dart';
 
 class MedicineDbController extends GetxController {
   var isLoading = true.obs;
+  var isSearching = false.obs;
 
   late TextEditingController searchTextController;
   ScrollController controller = ScrollController();
@@ -14,6 +15,7 @@ class MedicineDbController extends GetxController {
   List<Medicine> medicineList = [];
   int listLength = 20;
   int page = 0;
+  String searchKey = '';
 
 
   @override
@@ -35,7 +37,7 @@ class MedicineDbController extends GetxController {
 
   void fetchData() async {
     isLoading(true);
-    var result = await DatabaseService.database.rawQuery("SELECT * FROM brand LIMIT $listLength offset $page");
+    var result = await DatabaseService.database.rawQuery("SELECT * FROM brand WHERE brand_name LIKE '%$searchKey%' LIMIT $listLength offset $page");
 
     for (var element in result) {
       medicineList.add(Medicine.fromJson(element));
@@ -48,20 +50,30 @@ class MedicineDbController extends GetxController {
     controller.addListener(() async{
       if (controller.position.maxScrollExtent == controller.position.pixels) {
         page += 20;
-        var result = await DatabaseService.database.rawQuery("SELECT * FROM brand LIMIT $listLength offset $page");
+        var result = await DatabaseService.database.rawQuery("SELECT * FROM brand WHERE brand_name LIKE '%$searchKey%' LIMIT $listLength offset $page");
         for (var element in result) {
           medicineList.add(Medicine.fromJson(element));
         }
         update();
       }
-      print(page);
-
     });
   }
 
+  void toggleSearch() {
+    isSearching(!isSearching.value);
+    medicineList.clear();
+    searchTextController.clear();
+    page = 0;
+    searchKey = '';
+    fetchData();
+  }
 
-
-
+  void searchMedicine(String value) {
+    medicineList.clear();
+    page = 0;
+    searchKey = value;
+    fetchData();
+  }
 
 }
 

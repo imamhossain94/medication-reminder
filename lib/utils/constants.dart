@@ -10,8 +10,10 @@ const String designerName = 'Md. Imam Hossain';
 const String feedbackMail = 'mailto:imamagun94@gmail.com';
 const String contactMail = 'mailto:imamagun94@gmail.com';
 
-const String appLink = 'https://play.google.com/store/apps/details?id=com.masleap.medication_reminder';
-const String storeLink = 'https://play.google.com/store/apps/developer?id=NewAgeDevs';
+const String appLink =
+    'https://play.google.com/store/apps/details?id=com.masleap.medication_reminder';
+const String storeLink =
+    'https://play.google.com/store/apps/developer?id=NewAgeDevs';
 const String privacyPolicyUrl = '';
 
 // Test ads unit id Google
@@ -35,18 +37,20 @@ const colorOnPrimaryDark = Color(0xFFF8F8F8);
 const colorSecondaryDark = Color(0xFFFF2323);
 const colorOnSecondaryDark = Color(0xFFF8F8F8);
 
-SystemUiOverlayStyle mainPageSystemOverlay (Brightness brightness)=> SystemUiOverlayStyle.light.copyWith(
-  systemNavigationBarColor: brightness == Brightness.dark? scaffoldBackgroundLight:scaffoldBackgroundDark,
-  systemNavigationBarIconBrightness: brightness,
-  statusBarColor: brightness == Brightness.dark? scaffoldBackgroundLight:scaffoldBackgroundDark,
-  statusBarBrightness: brightness,
-  statusBarIconBrightness: brightness,
-);
+SystemUiOverlayStyle mainPageSystemOverlay(Brightness brightness) =>
+    SystemUiOverlayStyle.light.copyWith(
+      systemNavigationBarColor: brightness == Brightness.dark
+          ? scaffoldBackgroundLight
+          : scaffoldBackgroundDark,
+      systemNavigationBarIconBrightness: brightness,
+      statusBarColor: brightness == Brightness.dark
+          ? scaffoldBackgroundLight
+          : scaffoldBackgroundDark,
+      statusBarBrightness: brightness,
+      statusBarIconBrightness: brightness,
+    );
 
-enum viewMode {
-  list,
-  grid
-}
+enum viewMode { list, grid }
 
 // Assets path
 const bandageSvg = 'assets/form/bandage.svg';
@@ -60,3 +64,31 @@ const soapSvg = 'assets/form/soap.svg';
 const spraySvg = 'assets/form/spray.svg';
 const suppositorySvg = 'assets/form/suppository.svg';
 const tabletsSvg = 'assets/form/tablets.svg';
+const unknownSvg = 'assets/form/unknown.svg';
+
+
+// Form possibility
+class FormPossibility {
+  static const bottle = [
+    'suspension',
+    'syrup',
+    'solution',
+    'emulsion',
+    'liquid',
+    'wash',
+    'rub',
+    'elixir'
+  ];
+  static const tablet = ['tablet', 'film'];
+  static const capsule = 'cap';
+  static const injection = ['injection', 'saline', 'vaccine', 'infusion', 'kit'];
+  static const tube = ['gel', 'ointment', 'cream', 'paste', 'shampoo', 'lotion'];
+  static const suppository = 'suppository';
+  static const drops = 'drops';
+  static const inhaler = ['inhalation', 'inhaler', 'spray'];
+  static const powder = ['powder', 'saline'];
+  static const bandage = ['bandage', 'patch'];
+  static const soap = 'bar';
+}
+
+

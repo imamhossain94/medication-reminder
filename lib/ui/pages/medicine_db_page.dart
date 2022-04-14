@@ -14,9 +14,6 @@ class MedicineDbPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: mainPageSystemOverlay(Theme.of(context).brightness),
       child: SafeArea(
@@ -28,10 +25,22 @@ class MedicineDbPage extends StatelessWidget {
               color: Colors.black,
             ),
             titleSpacing: 0,
-            title: Text(
-              "Medicine Database",
-              style: Theme.of(context).textTheme.headline3,
-            ),
+            title: Obx(() => !controller.isSearching.value
+                ? Text(
+                    "Medicine Database",
+                    style: Theme.of(context).textTheme.headline3,
+                  )
+                : TextField(
+                    controller: controller.searchTextController,
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      hintText: "Search Medicine...",
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(color: Colors.white30),
+                    ),
+                    style: const TextStyle(color: Colors.black, fontSize: 16.0),
+                    onChanged: (value) => controller.searchMedicine(value),
+                  )),
             //centerTitle: true,
             // leading: IconButton(
             //     onPressed: controller.openDrawer,
@@ -42,12 +51,14 @@ class MedicineDbPage extends StatelessWidget {
             actions: [
               IconButton(
                   onPressed: () {
-                    // controller.toggleViewMode();
+                    controller.toggleSearch();
                   },
-                  icon: const Icon(
-                    FontAwesomeIcons.magnifyingGlass,
-                    size: 22,
-                  ))
+                  icon: Obx(() => Icon(
+                        controller.isSearching.value
+                            ? FontAwesomeIcons.xmark
+                            : FontAwesomeIcons.magnifyingGlass,
+                        size: 22,
+                      )))
             ],
           ),
           body: GetBuilder<MedicineDbController>(

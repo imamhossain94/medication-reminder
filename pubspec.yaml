@@ -48,7 +48,7 @@ flutter:
 
   assets:
     - assets/
-    - assets/form
+    - assets/form/
     - assets/ic_launcher.png
 
 
