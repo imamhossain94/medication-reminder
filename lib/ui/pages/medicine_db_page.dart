@@ -68,7 +68,12 @@ class MedicineDbPage extends StatelessWidget {
               controller: value.controller,
               itemCount: value.medicineList.length,
               itemBuilder: (context, index) {
-                return MedicineCard(medicine: value.medicineList[index]);
+                return MedicineCard(
+                  medicine: value.medicineList[index],
+                  onTap: () {
+
+                  },
+                );
               },
             ),
           ),

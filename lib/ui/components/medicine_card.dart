@@ -7,8 +7,8 @@ import '../../utils/extensions.dart';
 
 class MedicineCard extends StatelessWidget {
   final Medicine medicine;
-
-  const MedicineCard({Key? key, required this.medicine}) : super(key: key);
+  final VoidCallback onTap;
+  const MedicineCard({Key? key, required this.medicine, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class MedicineCard extends StatelessWidget {
       child: Material(
         child: InkWell(
           borderRadius: BorderRadius.circular(8.0),
-          onTap: () {},
+          onTap: onTap,
           child: Container(
             padding: const EdgeInsets.all(8.0),
             child: Row(
