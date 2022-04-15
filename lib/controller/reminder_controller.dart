@@ -27,6 +27,7 @@ class ReminderController extends GetxController {
     if(medicine != null) {
       medicineNameTextController.text = medicine!.brandName;
       medicineStrengthTextController.text = medicine!.strength;
+      selectedForm.value = formToMap(medicine!.form.toLowerCase());
     }
 
 
@@ -48,9 +49,12 @@ class ReminderController extends GetxController {
     );
     if (picked != null && picked != time.value) {
       time.value = picked;
-      print(picked);
       selectedTime.value = convertTime(time.value.hour.toString()) +
           convertTime(time.value.minute.toString());
+
+      print(picked.format12Hour(context));
+      print(selectedTime);
+
     }
   }
 

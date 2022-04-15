@@ -25,6 +25,7 @@ String convertTime(String minutes) {
   }
 }
 
+
 String formToSvgAssetsPath(String form) {
 
   // capsule 1
@@ -45,7 +46,7 @@ String formToSvgAssetsPath(String form) {
   // powder 2
   for (var element in FormPossibility.powder) {
     if(form.contains(element)){
-      return bandageSvg;
+      return powderSvg;
     }
   }
   // bandage 2
@@ -57,7 +58,7 @@ String formToSvgAssetsPath(String form) {
   // inhaler 3
   for (var element in FormPossibility.inhaler) {
     if(form.contains(element)){
-      return bandageSvg;
+      return spraySvg;
     }
   }
   // injection 5
@@ -80,6 +81,64 @@ String formToSvgAssetsPath(String form) {
   }
 
   return unknownSvg;
+}
+
+
+Map<String, String> formToMap(String form) {
+
+  // capsule 1
+  if(form.contains(FormPossibility.capsule)) return medicineForms[2];
+  // suppository 1
+  if(form.contains(FormPossibility.suppository)) return medicineForms[9];
+  // drops 1
+  if(form.contains(FormPossibility.drops)) return medicineForms[4];
+  // soap 1
+  if(form.contains(FormPossibility.soap)) return medicineForms[7];
+
+  // Tablet 2
+  for (var element in FormPossibility.tablet) {
+    if(form.contains(element)){
+      return medicineForms[10];
+    }
+  }
+  // powder 2
+  for (var element in FormPossibility.powder) {
+    if(form.contains(element)){
+      return medicineForms[6];
+    }
+  }
+  // bandage 2
+  for (var element in FormPossibility.bandage) {
+    if(form.contains(element)){
+      return medicineForms[0];
+    }
+  }
+  // inhaler 3
+  for (var element in FormPossibility.inhaler) {
+    if(form.contains(element)){
+      return medicineForms[8];
+    }
+  }
+  // injection 5
+  for (var element in FormPossibility.injection) {
+    if(form.contains(element)){
+      return medicineForms[5];
+    }
+  }
+  //tube 6
+  for (var element in FormPossibility.tube) {
+    if(form.contains(element)){
+      return medicineForms[3];
+    }
+  }
+  // Bottle 8
+  for (var element in FormPossibility.bottle) {
+    if(form.contains(element)){
+      return medicineForms[1];
+    }
+  }
+
+  return medicineForms[11];
 }
 
 
@@ -284,4 +343,22 @@ void showMessage(String text) {
       textColor: Colors.white,
       fontSize: 16.0
   );
+}
+
+
+extension TimeOfDayExtensions on TimeOfDay {
+  String format12Hour(BuildContext context) {
+    TimeOfDay time = replacing(hour: hourOfPeriod);
+    MaterialLocalizations localizations = MaterialLocalizations.of(context);
+
+    final StringBuffer buffer = StringBuffer();
+
+    buffer..write(time.format(context))..write(' ');
+      // ..write(
+      //   period == DayPeriod.am
+      //       ? localizations.anteMeridiemAbbreviation
+      //       : localizations.postMeridiemAbbreviation);
+
+    return '$buffer';
+  }
 }
