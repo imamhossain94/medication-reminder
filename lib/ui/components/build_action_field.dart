@@ -76,9 +76,14 @@ class BuildActionField extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(text!,
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                          child: Container(
+                            height: 48,width: double.infinity,
+                            alignment: Alignment.centerLeft,
+                            child: Text(text!,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold)),
+                          ),
                         ),
                         const SizedBox(
                           width: 5,
