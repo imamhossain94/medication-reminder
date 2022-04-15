@@ -1,18 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hive/hive.dart';
+import 'package:medication_reminder/models/medicine.dart';
 import 'package:medication_reminder/ui/pages/download_page.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'models/reminder.dart';
 import 'services/database_service.dart';
 import 'services/get_storage_service.dart';
+import 'services/hive_helper.dart';
 import 'services/theme_service.dart';
 import 'utils/themes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+
+  final appDocDir = await getApplicationDocumentsDirectory();
+  Hive..init(appDocDir.path)
+    ..registerAdapter(MedicineAdapter())
+    ..registerAdapter(ReminderAdapter());
+
+  await HiveHelper().init();
+
+
+
 
   await DatabaseService().init();
   await GetStorage.init();
