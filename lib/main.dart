@@ -4,10 +4,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:medication_reminder/models/medicine.dart';
 import 'package:medication_reminder/ui/pages/download_page.dart';
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:sqflite/sqflite.dart';
 
 import 'models/reminder.dart';
 import 'services/database_service.dart';
@@ -19,17 +17,13 @@ import 'utils/themes.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-
   final appDocDir = await getApplicationDocumentsDirectory();
-  Hive..init(appDocDir.path)
+  Hive
+    ..init(appDocDir.path)
     ..registerAdapter(MedicineAdapter())
     ..registerAdapter(ReminderAdapter());
 
   await HiveHelper().init();
-
-
-
-
   await DatabaseService().init();
   await GetStorage.init();
   setAppVersion();
@@ -40,21 +34,17 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
-    return Sizer(
-        builder: (context, orientation, deviceType) {
-          return GetMaterialApp(
-            title: 'Apk Extractor',
-            theme: Themes.light,
-            darkTheme: Themes.dark,
-            themeMode: ThemeService().theme,
-            debugShowCheckedModeBanner: false,
-            home: DownloadingPage(),
-          );
-        }
-    );
+    return Sizer(builder: (context, orientation, deviceType) {
+      return GetMaterialApp(
+        title: 'Apk Extractor',
+        theme: Themes.light,
+        darkTheme: Themes.dark,
+        themeMode: ThemeService().theme,
+        debugShowCheckedModeBanner: false,
+        home: DownloadingPage(),
+      );
+    });
   }
 }
-
