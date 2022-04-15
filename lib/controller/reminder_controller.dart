@@ -14,6 +14,7 @@ class ReminderController extends GetxController {
   var time = const TimeOfDay(hour: 0, minute: 00).obs;
   var selectedTime = '8:00'.obs;
   var selectedTimePeriod = 'PM'.obs;
+  var selectedInterval = 3.obs;
 
   @override
   void onInit() {

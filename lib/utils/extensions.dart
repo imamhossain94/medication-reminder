@@ -583,3 +583,118 @@ Widget timePickerSheet(BuildContext context, ValueChanged<Map<String, String>> o
     ),
   );
 }
+
+// Interval picker bottom sheet
+Widget intervalPickerSheet(BuildContext context, ValueChanged<String> onFinished) {
+
+  String hour = '01';
+
+  return Container(
+    margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 8),
+    padding: const EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 5,
+          blurRadius: 7,
+          offset: const Offset(0, 3), // changes position of shadow
+        ),
+      ],
+    ),
+    child: Wrap(
+      children: [
+        Row(
+          children: [
+            const Text(
+              'Select Interval',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const Spacer(),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(5)
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(5.0),
+                  onTap: (){
+                    onFinished(hour);
+                    Navigator.pop(context);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                    child: FaIcon(FontAwesomeIcons.check, size: 16,),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+        const Divider(),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 150,
+                width: ((MediaQuery.of(context).size.width - 78) / 3),
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).backgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListWheelScrollViewX(
+                        //controller: _controller,
+                        scrollDirection: Axis.vertical,
+                        itemExtent: 40,
+                        diameterRatio: 0.7,
+                        physics: const FixedExtentScrollPhysics(),
+                        onSelectedItemChanged: (v) {
+                          hour = '${'${v+1}'.length == 1 ? '0' : ''}${v+1}';
+                        },
+                        children: [
+                          for (var i = 1; i <= 12; i += 1)
+                            '${'$i'.length == 1 ? '0' : ''}$i'
+                        ].map((e) {
+                          return Container(
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            decoration: BoxDecoration(
+                                color: const Color(0xFF172B4D),
+                                borderRadius: BorderRadius.circular(5.0)),
+                            child: Text(
+                              e,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    const Divider(),
+                    const Center(
+                        child: Text(
+                          'HOURS',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    ),
+  );
+}
+
+
+

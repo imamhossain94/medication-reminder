@@ -204,43 +204,36 @@ class NewReminderPage extends StatelessWidget {
                             symbol: controller.selectedTimePeriod.value,
                             icon: FontAwesomeIcons.clock,
                             onTap: () {
-
                               Get.bottomSheet(
                                 timePickerSheet(context, (value) {
                                   controller.selectedTime.value =
-                                  "${value['h']}:${value['m']}";
+                                      "${value['h']}:${value['m']}";
                                   controller.selectedTimePeriod.value =
-                                  '${value['p']}';
+                                      '${value['p']}';
                                 }),
                                 barrierColor: Colors.transparent,
                                 isDismissible: false,
                               );
-
-
-                              // globalKey.currentState!.showBottomSheet<void>(
-                              //   (BuildContext context) =>
-                              //       timePickerSheet(context, (value) {
-                              //     controller.selectedTime.value =
-                              //         "${value['h']}:${value['m']}";
-                              //     controller.selectedTimePeriod.value =
-                              //         '${value['p']}';
-                              //   }),
-                              //   shape: RoundedRectangleBorder(
-                              //     borderRadius: BorderRadius.circular(10.0),
-                              //   ),
-                              //   backgroundColor: Colors.transparent,
-                              // );
-
-
                             },
                           )),
-                      BuildActionField(
-                        title: 'Remind Me Every',
-                        text: '5',
-                        symbol: 'Hours',
-                        icon: FontAwesomeIcons.angleDown,
-                        onTap: () {},
-                      ),
+                      Obx(() => BuildActionField(
+                            title: 'Remind Me Every',
+                            text: controller.selectedInterval.value.toString(),
+                            symbol: controller.selectedInterval.value == 1
+                                ? 'Hour'
+                                : 'Hours',
+                            icon: FontAwesomeIcons.angleDown,
+                            onTap: () {
+                              Get.bottomSheet(
+                                intervalPickerSheet(context, (value) {
+                                  controller.selectedInterval.value =
+                                      int.tryParse(value)!;
+                                }),
+                                barrierColor: Colors.transparent,
+                                isDismissible: false,
+                              );
+                            },
+                          )),
                     ],
                   ),
                 ),
@@ -250,7 +243,9 @@ class NewReminderPage extends StatelessWidget {
                 buttonText: 'START',
                 title: 'Start Reminder ?',
               ),
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
             ],
           ),
         ),
