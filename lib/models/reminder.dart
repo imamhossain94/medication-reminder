@@ -1,9 +1,17 @@
+import 'package:hive/hive.dart';
 import 'medicine.dart';
 
+part 'reminder.g.dart';
+
+@HiveType(typeId: 1)
 class Reminder {
+  @HiveField(0)
   final List<dynamic> notificationIDs;
+  @HiveField(1)
   final Medicine medicine;
+  @HiveField(2)
   final int interval;
+  @HiveField(3)
   final String startTime;
 
   Reminder({

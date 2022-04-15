@@ -45,7 +45,7 @@ dev_dependencies:
   hive_generator: ^1.1.2
   build_runner: ^2.1.7
   flutter_lints: ^1.0.0
-
+  #flutter packages pub run build_runner build
 
 flutter:
   uses-material-design: true

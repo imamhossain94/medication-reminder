@@ -1,13 +1,24 @@
+import 'package:hive/hive.dart';
 
+part 'medicine.g.dart';
 
+@HiveType(typeId: 0)
 class Medicine {
+  @HiveField(0)
   String brandId;
+  @HiveField(1)
   String genericId;
+  @HiveField(2)
   String companyId;
+  @HiveField(3)
   String brandName;
+  @HiveField(4)
   String form;
+  @HiveField(5)
   String strength;
+  @HiveField(6)
   String price;
+  @HiveField(7)
   String packsize;
 
   Medicine(
