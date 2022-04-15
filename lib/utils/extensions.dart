@@ -377,7 +377,7 @@ Widget timePickerSheet(BuildContext context, ValueChanged<Map<String, String>> o
     margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 8),
     padding: const EdgeInsets.all(8),
     decoration: BoxDecoration(
-      color: Theme.of(context).backgroundColor,
+      color: Colors.white,
       borderRadius: BorderRadius.circular(8),
       boxShadow: [
         BoxShadow(
@@ -399,7 +399,7 @@ Widget timePickerSheet(BuildContext context, ValueChanged<Map<String, String>> o
             const Spacer(),
             Container(
               decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),
+                  color: Colors.grey.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(5)
               ),
               child: Material(
@@ -456,7 +456,7 @@ Widget timePickerSheet(BuildContext context, ValueChanged<Map<String, String>> o
                             alignment: Alignment.center,
                             margin: const EdgeInsets.symmetric(horizontal: 5),
                             decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
+                                color: const Color(0xFF172B4D),
                                 borderRadius: BorderRadius.circular(5.0)),
                             child: Text(
                               e,
@@ -507,7 +507,7 @@ Widget timePickerSheet(BuildContext context, ValueChanged<Map<String, String>> o
                             alignment: Alignment.center,
                             margin: const EdgeInsets.symmetric(horizontal: 5),
                             decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
+                                color: const Color(0xFF172B4D),
                                 borderRadius: BorderRadius.circular(5.0)),
                             child: Text(
                               e,
@@ -555,7 +555,7 @@ Widget timePickerSheet(BuildContext context, ValueChanged<Map<String, String>> o
                             alignment: Alignment.center,
                             margin: const EdgeInsets.symmetric(horizontal: 5),
                             decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
+                                color: const Color(0xFF172B4D),
                                 borderRadius: BorderRadius.circular(5.0)),
                             child: Text(
                               e,

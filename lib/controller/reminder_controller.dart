@@ -5,9 +5,7 @@ import 'package:medication_reminder/utils/constants.dart';
 
 import '../utils/extensions.dart';
 
-
 class ReminderController extends GetxController {
-
   Medicine? medicine;
   late TextEditingController medicineNameTextController;
   late TextEditingController medicineStrengthTextController;
@@ -17,7 +15,6 @@ class ReminderController extends GetxController {
   var selectedTime = '8:00'.obs;
   var selectedTimePeriod = 'PM'.obs;
 
-
   @override
   void onInit() {
     medicineNameTextController = TextEditingController();
@@ -25,12 +22,11 @@ class ReminderController extends GetxController {
 
     medicine = Get.arguments;
 
-    if(medicine != null) {
+    if (medicine != null) {
       medicineNameTextController.text = medicine!.brandName;
       medicineStrengthTextController.text = medicine!.strength;
       selectedForm.value = formToMap(medicine!.form.toLowerCase());
     }
-
 
     super.onInit();
   }
@@ -42,35 +38,4 @@ class ReminderController extends GetxController {
     super.dispose();
   }
 
-
-  void selectTime(BuildContext context) async {
-    // final TimeOfDay? picked = await showTimePicker(
-    //   context: context,
-    //   initialTime: time.value,
-    //   initialEntryMode: TimePickerEntryMode.dial,
-    //   confirmText: "OK",
-    //   cancelText: "CANCEL",
-    //   helpText: "START TIME",
-    // );
-    // if (picked != null && picked != time.value) {
-    //   time.value = picked;
-    //   selectedTime.value = convertTime(time.value.hour.toString()) +
-    //       convertTime(time.value.minute.toString());
-    //
-    //   print(picked.format12Hour(context));
-    //   print(selectedTime);
-    //
-    // }
-
-    timePickerSheet(context, (value){
-      selectedTime.value = "${value['h']}:${value['m']}";
-      selectedTimePeriod.value = '${value['p']}';
-    });
-
-
-  }
-
-
-
 }
-

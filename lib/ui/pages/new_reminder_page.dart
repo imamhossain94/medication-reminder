@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../controller/controller.dart';
 import '../../utils/constants.dart';
+import '../../utils/extensions.dart';
 import '../components/build_action_button.dart';
 import '../components/build_action_field.dart';
 import '../components/build_text_field.dart';
@@ -15,12 +16,14 @@ class NewReminderPage extends StatelessWidget {
   NewReminderPage({Key? key}) : super(key: key);
 
   final controller = Get.put(ReminderController(), permanent: false);
+  final globalKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: mainPageSystemOverlay(Theme.of(context).brightness),
       child: SafeArea(
+        key: globalKey,
         child: Scaffold(
           appBar: AppBar(
             elevation: 0.5,
@@ -201,7 +204,34 @@ class NewReminderPage extends StatelessWidget {
                             symbol: controller.selectedTimePeriod.value,
                             icon: FontAwesomeIcons.clock,
                             onTap: () {
-                              controller.selectTime(context);
+
+                              Get.bottomSheet(
+                                timePickerSheet(context, (value) {
+                                  controller.selectedTime.value =
+                                  "${value['h']}:${value['m']}";
+                                  controller.selectedTimePeriod.value =
+                                  '${value['p']}';
+                                }),
+                                barrierColor: Colors.transparent,
+                                isDismissible: false,
+                              );
+
+
+                              // globalKey.currentState!.showBottomSheet<void>(
+                              //   (BuildContext context) =>
+                              //       timePickerSheet(context, (value) {
+                              //     controller.selectedTime.value =
+                              //         "${value['h']}:${value['m']}";
+                              //     controller.selectedTimePeriod.value =
+                              //         '${value['p']}';
+                              //   }),
+                              //   shape: RoundedRectangleBorder(
+                              //     borderRadius: BorderRadius.circular(10.0),
+                              //   ),
+                              //   backgroundColor: Colors.transparent,
+                              // );
+
+
                             },
                           )),
                       BuildActionField(
@@ -219,7 +249,8 @@ class NewReminderPage extends StatelessWidget {
                 onTap: () {},
                 buttonText: 'START',
                 title: 'Start Reminder ?',
-              )
+              ),
+              const SizedBox(height: 10,),
             ],
           ),
         ),
