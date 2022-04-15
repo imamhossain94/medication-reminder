@@ -239,7 +239,9 @@ class NewReminderPage extends StatelessWidget {
                 ),
               ),
               BuildActionButton(
-                onTap: () {},
+                onTap: () {
+                  controller.createReminder();
+                },
                 buttonText: 'START',
                 title: 'Start Reminder ?',
               ),

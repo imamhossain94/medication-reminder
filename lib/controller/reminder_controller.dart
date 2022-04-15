@@ -39,4 +39,8 @@ class ReminderController extends GetxController {
     super.dispose();
   }
 
+  void createReminder() {
+
+  }
+
 }

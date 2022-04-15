@@ -660,7 +660,7 @@ Widget intervalPickerSheet(BuildContext context, ValueChanged<String> onFinished
                           hour = '${'${v+1}'.length == 1 ? '0' : ''}${v+1}';
                         },
                         children: [
-                          for (var i = 1; i <= 12; i += 1)
+                          for (var i = 1; i <= 24; i += 1)
                             '${'$i'.length == 1 ? '0' : ''}$i'
                         ].map((e) {
                           return Container(
