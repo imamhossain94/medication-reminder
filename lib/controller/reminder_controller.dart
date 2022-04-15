@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medication_reminder/models/medicine.dart';
+import 'package:medication_reminder/models/reminder.dart';
 import 'package:medication_reminder/utils/constants.dart';
 
 import '../utils/extensions.dart';
@@ -43,9 +44,41 @@ class ReminderController extends GetxController {
 
   void createReminder() {
 
+    String brandName = medicineNameTextController.text.toString();
+    String strength = medicineStrengthTextController.text.toString();
+
+    if(brandName.isNotEmpty && strength.isNotEmpty){
+      int interval = selectedInterval.value;
+      String startTime = selectedTime.value.replaceAll(':', '');
+
+      List<int> intIDs = makeIDs(24 / interval);
+
+      List<String> notificationIDs =
+      intIDs.map((i) => i.toString()).toList(); //for Shared preference
+
+      Reminder newReminder = Reminder(
+        notificationIDs: notificationIDs,
+        medicine: medicine ??
+            Medicine(
+                brandId: '0',
+                genericId: '0',
+                companyId: '0',
+                brandName: medicineNameTextController.text.toString(),
+                form: selectedForm['name']!,
+                strength: medicineStrengthTextController.text.toString(),
+                price: '0.0',
+                packsize: '0'),
+        interval: interval,
+        startTime: startTime,
+      );
+
+
+
+    }else{
+      showMessage('Please enter all information.');
+    }
+
   }
-
-
 
 
   List<int> makeIDs(double n) {
@@ -56,5 +89,4 @@ class ReminderController extends GetxController {
     }
     return ids;
   }
-
 }
