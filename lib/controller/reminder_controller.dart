@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medication_reminder/models/medicine.dart';
@@ -41,6 +43,18 @@ class ReminderController extends GetxController {
 
   void createReminder() {
 
+  }
+
+
+
+
+  List<int> makeIDs(double n) {
+    var rng = Random();
+    List<int> ids = [];
+    for (int i = 0; i < n; i++) {
+      ids.add(rng.nextInt(1000000000));
+    }
+    return ids;
   }
 
 }
