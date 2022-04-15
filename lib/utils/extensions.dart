@@ -17,6 +17,13 @@ String generateRandomString(int len) {
   return List.generate(len, (index) => _chars[r.nextInt(_chars.length)]).join();
 }
 
+String convertTime(String minutes) {
+  if (minutes.length == 1) {
+    return "0" + minutes;
+  } else {
+    return minutes;
+  }
+}
 
 String formToSvgAssetsPath(String form) {
 

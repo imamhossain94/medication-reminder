@@ -200,7 +200,9 @@ class NewReminderPage extends StatelessWidget {
                         text: '11:20',
                         symbol: 'PM',
                         icon: FontAwesomeIcons.clock,
-                        onTap: () {},
+                        onTap: () {
+                          controller.selectTime(context);
+                        },
                       ),
                       BuildActionField(
                         title: 'Remind Me Every',
@@ -225,4 +227,9 @@ class NewReminderPage extends StatelessWidget {
       ),
     );
   }
+
+
+
+
+
 }
