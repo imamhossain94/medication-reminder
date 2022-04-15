@@ -195,15 +195,15 @@ class NewReminderPage extends StatelessWidget {
                               )
                             ],
                           )),
-                      BuildActionField(
-                        title: 'Start Time',
-                        text: '11:20',
-                        symbol: 'PM',
-                        icon: FontAwesomeIcons.clock,
-                        onTap: () {
-                          controller.selectTime(context);
-                        },
-                      ),
+                      Obx(() => BuildActionField(
+                            title: 'Start Time',
+                            text: controller.selectedTime.value,
+                            symbol: controller.selectedTimePeriod.value,
+                            icon: FontAwesomeIcons.clock,
+                            onTap: () {
+                              controller.selectTime(context);
+                            },
+                          )),
                       BuildActionField(
                         title: 'Remind Me Every',
                         text: '5',
@@ -216,8 +216,7 @@ class NewReminderPage extends StatelessWidget {
                 ),
               ),
               BuildActionButton(
-                onTap: () {
-                },
+                onTap: () {},
                 buttonText: 'START',
                 title: 'Start Reminder ?',
               )
@@ -227,9 +226,4 @@ class NewReminderPage extends StatelessWidget {
       ),
     );
   }
-
-
-
-
-
 }

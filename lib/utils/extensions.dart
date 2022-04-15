@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../ui/components/list_wheel_scroll_view_x.dart';
 import 'constants.dart';
 
 
@@ -349,7 +350,7 @@ void showMessage(String text) {
 extension TimeOfDayExtensions on TimeOfDay {
   String format12Hour(BuildContext context) {
     TimeOfDay time = replacing(hour: hourOfPeriod);
-    MaterialLocalizations localizations = MaterialLocalizations.of(context);
+    //MaterialLocalizations localizations = MaterialLocalizations.of(context);
 
     final StringBuffer buffer = StringBuffer();
 
@@ -361,4 +362,224 @@ extension TimeOfDayExtensions on TimeOfDay {
 
     return '$buffer';
   }
+}
+
+
+
+//Time picker bottom sheet
+Widget timePickerSheet(BuildContext context, ValueChanged<Map<String, String>> onFinished) {
+
+  String hour = '01';
+  String minute = '00';
+  String period = 'AM';
+
+  return Container(
+    margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 8),
+    padding: const EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Theme.of(context).backgroundColor,
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 5,
+          blurRadius: 7,
+          offset: const Offset(0, 3), // changes position of shadow
+        ),
+      ],
+    ),
+    child: Wrap(
+      children: [
+        Row(
+          children: [
+            const Text(
+              'Select Time',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const Spacer(),
+            Container(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(5)
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(5.0),
+                  onTap: (){
+                    onFinished({
+                      'h':hour,
+                      'm':minute,
+                      'p':period,
+                      't':'$hour:$minute$period'
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                    child: FaIcon(FontAwesomeIcons.check, size: 16,),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+        const Divider(),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 150,
+                width: ((MediaQuery.of(context).size.width - 78) / 3),
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).backgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListWheelScrollViewX(
+                        //controller: _controller,
+                        scrollDirection: Axis.vertical,
+                        itemExtent: 40,
+                        diameterRatio: 0.7,
+                        physics: const FixedExtentScrollPhysics(),
+                        onSelectedItemChanged: (v) {
+                          hour = '${'${v+1}'.length == 1 ? '0' : ''}${v+1}';
+                        },
+                        children: [
+                          for (var i = 1; i <= 12; i += 1)
+                            '${'$i'.length == 1 ? '0' : ''}$i'
+                        ].map((e) {
+                          return Container(
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.circular(5.0)),
+                            child: Text(
+                              e,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    const Divider(),
+                    const Center(
+                        child: Text(
+                          'HOURS',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                height: 150,
+                width: ((MediaQuery.of(context).size.width - 78) / 3),
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).backgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListWheelScrollViewX(
+                        //controller: _controller,
+                        scrollDirection: Axis.vertical,
+                        itemExtent: 40,
+                        diameterRatio: 0.7,
+                        physics: const FixedExtentScrollPhysics(),
+                        onSelectedItemChanged: (v) {
+                          minute = '${'$v'.length == 1 ? '0' : ''}$v';
+                        },
+                        children: [
+                          for (var i = 0; i <= 59; i += 1)
+                            '${'$i'.length == 1 ? '0' : ''}$i'
+                        ].map((e) {
+                          return Container(
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.circular(5.0)),
+                            child: Text(
+                              e,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    const Divider(),
+                    const Center(
+                        child: Text(
+                          'MINUTES',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                height: 150,
+                width: ((MediaQuery.of(context).size.width - 78) / 3),
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).backgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListWheelScrollViewX(
+                        //controller: _controller,
+                        scrollDirection: Axis.vertical,
+                        itemExtent: 40,
+                        diameterRatio: 0.7,
+                        physics: const FixedExtentScrollPhysics(),
+                        onSelectedItemChanged: (v) {
+                          period = ['AM', 'PM'][v];
+                        },
+                        children: ['AM', 'PM'].map((e) {
+                          return Container(
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.circular(5.0)),
+                            child: Text(
+                              e,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    const Divider(),
+                    const Center(
+                        child: Text(
+                          'PERIOD',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    ),
+  );
 }

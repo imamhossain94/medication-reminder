@@ -14,7 +14,8 @@ class ReminderController extends GetxController {
   var selectedForm = medicineForms.last.obs;
 
   var time = const TimeOfDay(hour: 0, minute: 00).obs;
-  var selectedTime = '0:00'.obs;
+  var selectedTime = '8:00'.obs;
+  var selectedTimePeriod = 'PM'.obs;
 
 
   @override
@@ -43,19 +44,30 @@ class ReminderController extends GetxController {
 
 
   void selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: time.value,
-    );
-    if (picked != null && picked != time.value) {
-      time.value = picked;
-      selectedTime.value = convertTime(time.value.hour.toString()) +
-          convertTime(time.value.minute.toString());
+    // final TimeOfDay? picked = await showTimePicker(
+    //   context: context,
+    //   initialTime: time.value,
+    //   initialEntryMode: TimePickerEntryMode.dial,
+    //   confirmText: "OK",
+    //   cancelText: "CANCEL",
+    //   helpText: "START TIME",
+    // );
+    // if (picked != null && picked != time.value) {
+    //   time.value = picked;
+    //   selectedTime.value = convertTime(time.value.hour.toString()) +
+    //       convertTime(time.value.minute.toString());
+    //
+    //   print(picked.format12Hour(context));
+    //   print(selectedTime);
+    //
+    // }
 
-      print(picked.format12Hour(context));
-      print(selectedTime);
+    timePickerSheet(context, (value){
+      selectedTime.value = "${value['h']}:${value['m']}";
+      selectedTimePeriod.value = '${value['p']}';
+    });
 
-    }
+
   }
 
 
