@@ -9,6 +9,7 @@ class ReminderController extends GetxController {
   Medicine? medicine;
   late TextEditingController medicineNameTextController;
   late TextEditingController medicineStrengthTextController;
+  var selectedForm = medicineForms.last.obs;
 
   @override
   void onInit() {

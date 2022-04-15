@@ -16,7 +16,7 @@ class BuildTextField extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.all(7),
-      height: 60,
+      //height: 60,
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -57,6 +57,7 @@ class BuildTextField extends StatelessWidget {
               child: Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 decoration: BoxDecoration(
                   color: Colors.grey.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(5),

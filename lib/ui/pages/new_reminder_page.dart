@@ -49,7 +49,6 @@ class NewReminderPage extends StatelessWidget {
                 textController: controller.medicineStrengthTextController,
                 textInputType: TextInputType.number,
               ),
-
               Container(
                   margin: const EdgeInsets.all(7),
                   padding: const EdgeInsets.all(7),
@@ -83,20 +82,24 @@ class NewReminderPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Container(
-                            height: 40,
-                            width: 40,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(5),
+                          Obx(()=>Tooltip(
+                            message: controller.selectedForm['name'],
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: SvgPicture.asset(
+                                  controller.selectedForm['path']!,
+                                  key: UniqueKey(),
+                                  color: const Color(0xFF172B4D),
+                                  semanticsLabel: controller.selectedForm['name']
+                              ),
                             ),
-                            child: SvgPicture.asset(
-                                emptySvg,
-                                color: const Color(0xFF172B4D),
-                                semanticsLabel: controller.medicine!.form
-                            ),
-                          )
+                          ))
                         ],
                       ),
                       Container(
@@ -120,7 +123,6 @@ class NewReminderPage extends StatelessWidget {
                                   margin: const EdgeInsets.all(5),
                                   height: 60,
                                   width: 60,
-                                  padding: const EdgeInsets.all(20),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(5),
@@ -133,10 +135,29 @@ class NewReminderPage extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  child: SvgPicture.asset(
-                                      medicineForms[index]['path']!,
-                                      color: const Color(0xFF172B4D),
-                                      semanticsLabel: controller.medicine!.form
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: InkWell(
+                                      onTap: () {
+                                        controller.selectedForm.value = medicineForms[index];
+                                      },
+                                      borderRadius: BorderRadius.circular(5),
+                                      child: Tooltip(
+                                        message: medicineForms[index]['name']!,
+                                        child: Container(
+                                          height: 60,
+                                          width: 60,
+                                          padding: const EdgeInsets.all(20),
+                                          color: Colors.transparent,
+                                          child: SvgPicture.asset(
+                                              medicineForms[index]['path']!,
+                                              color: const Color(0xFF172B4D),
+                                              semanticsLabel: medicineForms[index]['name']!
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 );
                               }
@@ -146,7 +167,20 @@ class NewReminderPage extends StatelessWidget {
                     ],
                   )
               ),
-
+              BuildTextField(
+                title: 'Start Time',
+                hint: '11:20',
+                symbol: 'PM',
+                textController: null,
+                textInputType: TextInputType.number,
+              ),
+              BuildTextField(
+                title: 'Remind Me Every',
+                hint: '5',
+                symbol: 'Hours',
+                textController: null,
+                textInputType: TextInputType.number,
+              ),
 
             ],
           ),
