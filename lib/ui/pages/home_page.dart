@@ -8,6 +8,7 @@ import '../../controller/home_controller.dart';
 import '../../utils/constants.dart';
 import '../../utils/extensions.dart';
 import '../components/main_drawer.dart';
+import '../components/reminder_card.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
@@ -65,7 +66,13 @@ class HomePage extends StatelessWidget {
                   controller: value.controller,
                   itemCount: value.reminderList.length,
                   itemBuilder: (context, index) {
-                    return Text(value.reminderList[index].medicine.brandName, key: UniqueKey(),);
+                    return Obx(()=>ReminderCard(
+                      mode: controller.view.value,
+                      reminder: value.reminderList[index],
+                      onTap: () {
+                        print('he he');
+                      },
+                    ));
                   },
                 );
               }
