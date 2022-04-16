@@ -81,7 +81,7 @@ class MedicineDbPage extends StatelessWidget {
                         return MedicineCard(
                           medicine: value.medicineList[index],
                           onTap: () {
-                            Get.to(()=> NewReminderPage(), arguments: value.medicineList[index]);
+                            Get.off(()=> NewReminderPage(), arguments: value.medicineList[index]);
                           },
                         );
                       },
@@ -120,7 +120,7 @@ class MedicineDbPage extends StatelessWidget {
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            Get.to(()=> NewReminderPage(), arguments: null);
+                            Get.off(()=> NewReminderPage(), arguments: null);
                         }
                       ),
                     ],

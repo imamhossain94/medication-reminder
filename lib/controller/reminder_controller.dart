@@ -66,7 +66,7 @@ class ReminderController extends GetxController {
 
     if(brandName.isNotEmpty && strength.isNotEmpty){
       int interval = selectedInterval.value;
-      String startTime = selectedTime.value.replaceAll(':', '');
+      String startTime = selectedTime.value;
 
       List<int> intIDs = makeIDs(24 / interval);
 
@@ -121,10 +121,13 @@ class ReminderController extends GetxController {
 
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
+    String time = time12to24Format('${reminder.startTime} $selectedTimePeriod').trim().replaceAll(':', '');
 
-    var hour = int.parse(reminder.startTime[0] + reminder.startTime[1]);
+    print(time);
+
+    var hour = int.parse(time[0] + time[1]);
     var ogValue = hour;
-    var minute = int.parse(reminder.startTime[2] + reminder.startTime[3]);
+    var minute = int.parse(time[2] + time[3]);
 
     var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
       'channel id',
@@ -132,6 +135,7 @@ class ReminderController extends GetxController {
       //'repeatDailyAtTime description',
       importance: Importance.max,
       //sound: AndroidNotificationSound(),
+      icon: 'ic_launcher',
       ledColor: Color(0xFF3EB16F),
       ledOffMs: 1000,
       ledOnMs: 1000,
@@ -142,6 +146,7 @@ class ReminderController extends GetxController {
         android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
 
     for (int i = 0; i < (24 / reminder.interval).floor(); i++) {
+
       if ((hour + (reminder.interval * i) > 23)) {
         hour = hour + (reminder.interval * i) - 24;
       } else {
@@ -178,7 +183,8 @@ class ReminderController extends GetxController {
       hour = ogValue;
     }
     //await flutterLocalNotificationsPlugin.cancelAll();
-    Get.offAll(()=> HomePage());
+    Get.deleteAll(force: true).then((value) => Get.offAll(()=> HomePage()));
+
   }
 
 

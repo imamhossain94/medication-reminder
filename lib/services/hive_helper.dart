@@ -11,11 +11,11 @@ class HiveHelper {
 }
 
 // Reminder
-List<dynamic> getReminderList() {
+List<Reminder> getReminderList() {
   List _routineDatabase = <Reminder>[];
   _routineDatabase = HiveHelper.reminderBox.values.toList();
   _routineDatabase = _routineDatabase.reversed.toList();
-  return _routineDatabase;
+  return List<Reminder>.from(_routineDatabase).toList();
 }
 
 void addNewReminder(Reminder reminder) async{

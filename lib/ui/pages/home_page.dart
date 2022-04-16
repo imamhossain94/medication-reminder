@@ -11,11 +11,11 @@ import '../components/main_drawer.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
-
-  final controller = Get.put(HomeController());
+  final controller = Get.put(HomeController(), permanent: true,);
 
   @override
   Widget build(BuildContext context) {
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: mainPageSystemOverlay(Theme.of(context).brightness),
       child: SafeArea(
@@ -58,7 +58,6 @@ class HomePage extends StatelessWidget {
             init: controller,
             global: false,
             builder: (value) {
-
               if(value.reminderList.isEmpty){
                 return emptyScreen('No Medicine Found');
               }else{
@@ -66,7 +65,7 @@ class HomePage extends StatelessWidget {
                   controller: value.controller,
                   itemCount: value.reminderList.length,
                   itemBuilder: (context, index) {
-                    return const Text('Hello');
+                    return Text(value.reminderList[index].medicine.brandName, key: UniqueKey(),);
                   },
                 );
               }
