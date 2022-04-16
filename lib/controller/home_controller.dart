@@ -21,11 +21,6 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void dispose() {
-
-    super.dispose();
-  }
 
   void openDrawer() {
     scaffoldKey.currentState?.openDrawer();

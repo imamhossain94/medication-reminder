@@ -66,7 +66,7 @@ class ReminderController extends GetxController {
 
     if(brandName.isNotEmpty && strength.isNotEmpty){
       int interval = selectedInterval.value;
-      String startTime = selectedTime.value;
+      String startTime = '${selectedTime.value} $selectedTimePeriod';
 
       List<int> intIDs = makeIDs(24 / interval);
 
@@ -121,9 +121,7 @@ class ReminderController extends GetxController {
 
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-    String time = time12to24Format('${reminder.startTime} $selectedTimePeriod').trim().replaceAll(':', '');
-
-    print(time);
+    String time = time12to24Format(reminder.startTime).trim().replaceAll(':', '');
 
     var hour = int.parse(time[0] + time[1]);
     var ogValue = hour;

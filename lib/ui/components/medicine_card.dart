@@ -7,7 +7,7 @@ import '../../utils/extensions.dart';
 
 class MedicineCard extends StatelessWidget {
   final Medicine medicine;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   const MedicineCard({Key? key, required this.medicine, required this.onTap}) : super(key: key);
 
   @override

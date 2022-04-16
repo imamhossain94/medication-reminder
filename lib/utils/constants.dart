@@ -14,7 +14,7 @@ const String appLink =
     'https://play.google.com/store/apps/details?id=com.masleap.medication_reminder';
 const String storeLink =
     'https://play.google.com/store/apps/developer?id=NewAgeDevs';
-const String privacyPolicyUrl = '';
+const String privacyPolicyUrl = 'https://medication-reminder-privay.blogspot.com/2022/04/medication-reminder-privacy-policy.html';
 
 // Test ads unit id Google
 // const String idBanner = "ca-app-pub-3940256099942544/6300978111";

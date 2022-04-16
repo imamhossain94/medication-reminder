@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:medication_reminder/ui/pages/medicine_db_page.dart';
+import 'package:medication_reminder/ui/pages/reminder_details_page.dart';
 
 import '../../controller/home_controller.dart';
 import '../../utils/constants.dart';
@@ -88,7 +89,7 @@ class HomePage extends StatelessWidget {
                       return ReminderCard(
                         reminder: value.reminderList[index],
                         onTap: () {
-                          print('he he');
+                          Get.to(()=>ReminderDetailsPage(reminder: value.reminderList[index],));
                         },
                       );
                     }));
