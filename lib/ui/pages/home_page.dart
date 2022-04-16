@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:medication_reminder/ui/pages/medicine_db_page.dart';
@@ -62,19 +63,38 @@ class HomePage extends StatelessWidget {
               if(value.reminderList.isEmpty){
                 return emptyScreen('No Medicine Found');
               }else{
-                return ListView.builder(
-                  controller: value.controller,
-                  itemCount: value.reminderList.length,
-                  itemBuilder: (context, index) {
-                    return Obx(()=>ReminderCard(
-                      mode: controller.view.value,
-                      reminder: value.reminderList[index],
-                      onTap: () {
-                        print('he he');
-                      },
-                    ));
-                  },
-                );
+                // return ListView.builder(
+                //   controller: value.controller,
+                //   itemCount: value.reminderList.length,
+                //   itemBuilder: (context, index) {
+                //     return Obx(()=>ReminderCard(
+                //       mode: controller.view.value,
+                //       reminder: value.reminderList[index],
+                //       onTap: () {
+                //         print('he he');
+                //       },
+                //     ));
+                //   },
+                // );
+
+                return Obx(()=>MasonryGridView.count(
+                    crossAxisCount: controller.view.value == viewMode.grid?2:1,
+                    mainAxisSpacing: 1,
+                    crossAxisSpacing: 4,
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: value.reminderList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ReminderCard(
+                        reminder: value.reminderList[index],
+                        onTap: () {
+                          print('he he');
+                        },
+                      );
+                    }));
+
+
+
               }
 
             },

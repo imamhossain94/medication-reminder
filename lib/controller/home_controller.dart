@@ -10,7 +10,7 @@ class HomeController extends GetxController {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   ScrollController controller = ScrollController();
 
-  var view = viewMode.list.obs;
+  var view = viewMode.grid.obs;
   var isLoading = false.obs;
 
   var reminderList = <Reminder>[].obs;
