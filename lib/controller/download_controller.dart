@@ -5,7 +5,6 @@ import 'package:dio/dio.dart' as dio_response;
 import 'package:get/get.dart';
 import 'package:medication_reminder/ui/pages/home_page.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../services/database_service.dart';
 
@@ -21,8 +20,7 @@ class DownloadController extends GetxController {
   }
 
   void checkDatabase() async {
-    final exists = await databaseExists(DatabaseService.path);
-    if(exists){
+    if(DatabaseService.exist){
       await Future.delayed(const Duration(seconds: 2), () {
         navigateScreen();
       });
@@ -68,9 +66,7 @@ class DownloadController extends GetxController {
   void importData(String downloadedDbPath) async {
     // Check if we have an existing copy first
 
-    final exists = await databaseExists(DatabaseService.path);
-
-    if (!exists) {
+    if (!DatabaseService.exist) {
       try {
         File file = File(downloadedDbPath);
         await file.exists();
@@ -90,6 +86,6 @@ class DownloadController extends GetxController {
   }
 
   void navigateScreen() {
-    Get.to(HomePage());
+    Get.offAll(HomePage());
   }
 }

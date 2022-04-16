@@ -7,7 +7,8 @@ import 'package:medication_reminder/models/medicine.dart';
 import 'package:medication_reminder/models/reminder.dart';
 import 'package:medication_reminder/services/hive_helper.dart';
 import 'package:medication_reminder/utils/constants.dart';
-
+import 'package:timezone/data/latest.dart' as tz;
+//import 'package:timezone/timezone.dart' as tz;
 import '../ui/pages/home_page.dart';
 import '../utils/extensions.dart';
 
@@ -43,6 +44,10 @@ class ReminderController extends GetxController {
     medicineNameTextController.dispose();
     medicineStrengthTextController.dispose();
     super.dispose();
+  }
+
+  Future initializetimezone() async {
+    tz.initializeTimeZones();
   }
 
   List<int> makeIDs(double n) {
@@ -84,7 +89,7 @@ class ReminderController extends GetxController {
         startTime: startTime,
       );
       addNewReminder(newReminder);
-
+      scheduleNotification(newReminder);
 
     }else{
       showMessage('Please enter all information.');
@@ -95,7 +100,7 @@ class ReminderController extends GetxController {
 
   initializeNotifications() async {
     var initializationSettingsAndroid =
-    const AndroidInitializationSettings('@drawable/launcher_icon');
+    const AndroidInitializationSettings('@drawable/ic_launcher');
     var initializationSettingsIOS = const IOSInitializationSettings();
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
@@ -112,13 +117,18 @@ class ReminderController extends GetxController {
 
 
   Future<void> scheduleNotification(Reminder reminder) async {
+    //await initializetimezone();
+
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+
     var hour = int.parse(reminder.startTime[0] + reminder.startTime[1]);
     var ogValue = hour;
     var minute = int.parse(reminder.startTime[2] + reminder.startTime[3]);
 
     var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
-      'repeatDailyAtTime channel id',
-      'repeatDailyAtTime channel name',
+      'channel id',
+      'Medication Reminder',
       //'repeatDailyAtTime description',
       importance: Importance.max,
       //sound: AndroidNotificationSound(),
@@ -137,7 +147,7 @@ class ReminderController extends GetxController {
       } else {
         hour = hour + (reminder.interval * i);
       }
-      await FlutterLocalNotificationsPlugin().showDailyAtTime(
+      await flutterLocalNotificationsPlugin.showDailyAtTime(
           int.parse(reminder.notificationIDs[i]),
           'Medication Reminder: ${reminder.medicine.brandName}',
           reminder.medicine.form.toString() != 'Unspecified'
@@ -145,9 +155,30 @@ class ReminderController extends GetxController {
               : 'It is time to take your medicine, according to schedule',
           Time(hour, minute, 0),
           platformChannelSpecifics);
+
+
+      // Duration offsetTime= DateTime.now().timeZoneOffset;
+      // tz.TZDateTime zonedTime = tz.TZDateTime.local(DateTime.now().year,DateTime.now().month,DateTime.now().day,hour,
+      //     minute).subtract(offsetTime);
+      //
+      //
+      // await flutterLocalNotificationsPlugin.zonedSchedule(
+      //     int.parse(reminder.notificationIDs[i]),
+      //     'Medication Reminder: ${reminder.medicine.brandName}',
+      //     reminder.medicine.form.toString() != 'Unspecified'
+      //         ? 'It is time to take your ${reminder.medicine.form.toLowerCase()}, according to schedule'
+      //         : 'It is time to take your medicine, according to schedule',
+      //     zonedTime,
+      //     platformChannelSpecifics,
+      //     androidAllowWhileIdle: true,
+      //     uiLocalNotificationDateInterpretation:
+      //     UILocalNotificationDateInterpretation.absoluteTime);
+
+
       hour = ogValue;
     }
     //await flutterLocalNotificationsPlugin.cancelAll();
+    Get.offAll(()=> HomePage());
   }
 
 
