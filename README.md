@@ -17,23 +17,13 @@ your phone.
 
 <table>
 <tr>
-<td align="center"><img src="screenshots/01_home_light.png" width="230" alt="Home screen, light theme"><br><sub>Home</sub></td>
-<td align="center"><img src="screenshots/04_reminder_dark.png" width="230" alt="Reminder details, dark theme"><br><sub>Reminder details</sub></td>
-<td align="center"><img src="screenshots/02_medicine_library.png" width="230" alt="Medicine library"><br><sub>Medicine library</sub></td>
+<td align="center"><img src="screenshots/01_home_light.png" width="230" alt="Home screen, light theme"><br><sub>Home — reminders, doses/day and next-dose countdown</sub></td>
+<td align="center"><img src="screenshots/02_medicine_library.png" width="230" alt="Medicine library"><br><sub>Medicine library — 17 000+ brands</sub></td>
+<td align="center"><img src="screenshots/05_search.png" width="230" alt="Searching the database"><br><sub>Search — brand and generic names</sub></td>
 </tr>
 <tr>
-<td align="center"><img src="screenshots/03_new_reminder.png" width="230" alt="Creating a reminder"><br><sub>New reminder</sub></td>
-<td align="center"><img src="screenshots/08_interval_picker.png" width="230" alt="Choosing the dose interval"><br><sub>Interval picker</sub></td>
-<td align="center"><img src="screenshots/07_medicine_details.png" width="230" alt="Drug monograph"><br><sub>Drug monograph</sub></td>
-</tr>
-<tr>
-<td align="center"><img src="screenshots/05_search.png" width="230" alt="Searching the database"><br><sub>Search</sub></td>
-<td align="center"><img src="screenshots/09_drawer.png" width="230" alt="Navigation drawer"><br><sub>Drawer</sub></td>
-<td align="center"><img src="screenshots/06_data_source.png" width="230" alt="Where the medicine data comes from"><br><sub>Data attribution</sub></td>
-</tr>
-<tr>
-<td align="center"><img src="screenshots/10_empty_state.png" width="230" alt="Empty state"><br><sub>Empty state</sub></td>
-<td></td>
+<td align="center"><img src="screenshots/07_medicine_details.png" width="230" alt="Drug monograph"><br><sub>Drug monograph — indication, dose, side effects…</sub></td>
+<td align="center"><img src="screenshots/03_new_reminder.png" width="230" alt="Creating a reminder"><br><sub>New reminder — interval and dose preview</sub></td>
 <td></td>
 </tr>
 </table>
