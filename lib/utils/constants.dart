@@ -15,8 +15,14 @@ const String designerName = 'Md. Imam Hossain';
 const String feedbackMail = 'mailto:imamagun94@gmail.com';
 const String contactMail = 'mailto:imamagun94@gmail.com';
 
-const String appLink =
-    'https://play.google.com/store/apps/details?id=com.masleap.medication_reminder';
+/// Must match `applicationId` in `android/app/build.gradle.kts` and the
+/// package used in the Play Store listing.
+const String appPackageId = 'com.newagedevs.medication_reminder';
+
+/// Play Store listing for this app.
+const String appLink = 'https://play.google.com/store/apps/details?id=$appPackageId';
+
+/// The developer's other published apps.
 const String storeLink =
     'https://play.google.com/store/apps/developer?id=NewAgeDevs';
 const String privacyPolicyUrl =
