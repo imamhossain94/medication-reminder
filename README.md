@@ -17,22 +17,24 @@ your phone.
 
 <table>
 <tr>
-<td width="33%"><img src="screenshots/01_home_light.png" alt="Home screen, light theme"></td>
-<td width="33%"><img src="screenshots/04_reminder_dark.png" alt="Reminder details, dark theme"></td>
-<td width="33%"><img src="screenshots/02_medicine_library.png" alt="Medicine library"></td>
+<td align="center"><img src="screenshots/01_home_light.png" width="230" alt="Home screen, light theme"><br><sub>Home</sub></td>
+<td align="center"><img src="screenshots/04_reminder_dark.png" width="230" alt="Reminder details, dark theme"><br><sub>Reminder details</sub></td>
+<td align="center"><img src="screenshots/02_medicine_library.png" width="230" alt="Medicine library"><br><sub>Medicine library</sub></td>
 </tr>
 <tr>
-<td><img src="screenshots/03_new_reminder.png" alt="Creating a reminder"></td>
-<td><img src="screenshots/08_interval_picker.png" alt="Choosing the dose interval"></td>
-<td><img src="screenshots/07_medicine_details.png" alt="Drug monograph"></td>
+<td align="center"><img src="screenshots/03_new_reminder.png" width="230" alt="Creating a reminder"><br><sub>New reminder</sub></td>
+<td align="center"><img src="screenshots/08_interval_picker.png" width="230" alt="Choosing the dose interval"><br><sub>Interval picker</sub></td>
+<td align="center"><img src="screenshots/07_medicine_details.png" width="230" alt="Drug monograph"><br><sub>Drug monograph</sub></td>
 </tr>
 <tr>
-<td><img src="screenshots/05_search.png" alt="Searching the database"></td>
-<td><img src="screenshots/09_drawer.png" alt="Navigation drawer"></td>
-<td><img src="screenshots/06_data_source.png" alt="Where the medicine data comes from"></td>
+<td align="center"><img src="screenshots/05_search.png" width="230" alt="Searching the database"><br><sub>Search</sub></td>
+<td align="center"><img src="screenshots/09_drawer.png" width="230" alt="Navigation drawer"><br><sub>Drawer</sub></td>
+<td align="center"><img src="screenshots/06_data_source.png" width="230" alt="Where the medicine data comes from"><br><sub>Data attribution</sub></td>
 </tr>
 <tr>
-<td colspan="3"><img src="screenshots/10_empty_state.png" alt="Empty state" width="33%"></td>
+<td align="center"><img src="screenshots/10_empty_state.png" width="230" alt="Empty state"><br><sub>Empty state</sub></td>
+<td></td>
+<td></td>
 </tr>
 </table>
 
@@ -187,17 +189,39 @@ flutter test
 ### Build a release APK
 
 ```bash
-flutter build apk --release      # build/app/outputs/flutter-apk/app-release.apk
-flutter build appbundle          # for Google Play
+flutter build apk --release                   # 56 MB (all ABIs)
+flutter build apk --release --split-per-abi   # 19–23 MB per ABI
+flutter build appbundle                       # for Google Play
 ```
+
+| Output | Size |
+|---|---|
+| `app-arm64-v8a-release.apk` (most modern phones) | 21.3 MB |
+| `app-armeabi-v7a-release.apk` (older 32-bit) | 19.0 MB |
+| `app-x86_64-release.apk` (emulators) | 22.8 MB |
+| `app-release.apk` (fat APK, every ABI) | 56.1 MB |
 
 > **Note on JDK:** this project uses AGP 9 / Gradle 9.1, so build with **JDK 17
 > or newer** (e.g. Android Studio's bundled JBR).
+>
+> The `release` build type is still wired to the **debug** signing config so
+> `flutter run --release` works out of the box. Before publishing, copy
+> `android/key.properties.example` to `android/key.properties` and follow the
+> instructions in that file.
 
 ### Regenerate the app icon
 
 ```bash
 python tool/generate_assets.py
+```
+
+The script draws the launcher icon (legacy + adaptive) and the splash
+background from scratch, so no design source files are needed in the repo.
+
+### Take a screenshot
+
+```powershell
+.\tool\capture.ps1 -Name my_screenshot     # writes screenshots\my_screenshot.png
 ```
 
 ---
