@@ -1,0 +1,39 @@
+# ---------------------------------------------------------------------------
+# Copy this file to `android/key.properties` on your machine and fill it in.
+# NEVER commit the filled-in version — `.gitignore` already excludes it.
+#
+#   cp android/key.properties.example android/key.properties
+#
+# Then reference it from android/app/build.gradle.kts:
+#
+#   val keystoreProperties = Properties()
+#   val keystorePropertiesFile = rootProject.file("key.properties")
+#   if (keystorePropertiesFile.exists()) {
+#       keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
+#   }
+#
+#   android {
+#       signingConfigs {
+#           create("release") {
+#               keyAlias = keystoreProperties["keyAlias"] as String
+#               keyPassword = keystoreProperties["keyPassword"] as String
+#               storeFile = file(keystoreProperties["storeFile"] as String)
+#               storePassword = keystoreProperties["storePassword"] as String
+#           }
+#       }
+#       buildTypes {
+#           release {
+#               signingConfig = signingConfigs.getByName("release")
+#           }
+#       }
+#   }
+#
+# Generate the keystore with:
+#   keytool -genkey -v -keystore ~/keys/upload-keystore.jks \
+#           -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+# ---------------------------------------------------------------------------
+
+storePassword=CHANGE_ME
+keyPassword=CHANGE_ME
+keyAlias=upload
+storeFile=/absolute/path/to/upload-keystore.jks

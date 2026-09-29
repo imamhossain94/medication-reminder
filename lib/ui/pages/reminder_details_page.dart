@@ -1,203 +1,344 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
-import 'package:medication_reminder/models/reminder.dart';
-import 'package:sizer/sizer.dart';
+import 'package:get/get.dart';
 
-import '../../services/hive_helper.dart';
+import '../../controllers/home_controller.dart';
+import '../../models/reminder.dart';
+import '../../theme/app_theme.dart';
 import '../../utils/constants.dart';
-import '../../utils/extensions.dart';
-import '../components/medicine_card.dart';
+import '../../utils/time_utils.dart';
+import '../widgets/common.dart';
 
 class ReminderDetailsPage extends StatelessWidget {
-  final Reminder reminder;
-
   const ReminderDetailsPage({Key? key, required this.reminder})
       : super(key: key);
 
+  final Reminder reminder;
+
   @override
   Widget build(BuildContext context) {
-    possibleRemindTime();
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
+    final Color accent = reminder.medicine.medicineForm.color;
+    final DateTime next = reminder.nextDose();
+    final List<TimeOfDay> schedule = reminder.schedule;
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: mainPageSystemOverlay(Theme.of(context).brightness),
-      child: SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0.5,
-            backgroundColor: Colors.white,
-            iconTheme: const IconThemeData(
-              color: Colors.black,
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        slivers: <Widget>[
+          SliverAppBar(
+            pinned: true,
+            expandedHeight: 196,
+            backgroundColor: accent,
+            foregroundColor: Colors.white,
+            title: Text('Reminder', style: displayStyle(16, color: Colors.white)),
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              statusBarIconBrightness: Brightness.light,
+              statusBarBrightness: Brightness.dark,
             ),
-            titleSpacing: 0,
-            title: Text(
-              "Reminder Details",
-              style: Theme.of(context).textTheme.headline3,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[
+                      accent,
+                      Color.lerp(accent, Colors.black, 0.28)!,
+                    ],
+                  ),
+                ),
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(22, 22, 22, 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            FormBadge(
+                              form: reminder.medicine.medicineForm,
+                              size: 54,
+                              iconSize: 26,
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    reminder.medicine.displayName,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: displayStyle(21, color: Colors.white),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    reminder.medicine.formLabel,
+                                    style: const TextStyle(
+                                      fontFamily: kBodyFont,
+                                      fontSize: 12.5,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    removeReminder(reminder);
-                  },
-                  icon: const Icon(
-                    FontAwesomeIcons.trash,
-                    size: 22,
-                  ))
-            ],
           ),
-          body: Column(
-            children: [
-              MedicineCard(
-                medicine: reminder.medicine,
-                onTap: null,
-              ),
-              Row(
-                children: [
-                  item('Name', reminder.medicine.brandName),
-                  item('Strength', reminder.medicine.strength),
-                ],
-              ),
-              Row(
-                children: [
-                  item('Price', '${reminder.medicine.price}৳'),
-                  item('Pack Size', reminder.medicine.packsize),
-                ],
-              ),
-              Row(
-                children: [
-                  item('Form', reminder.medicine.form),
-                  item('Reminder', 'Every ${reminder.interval} hours'),
-                ],
-              ),
-              Row(
-                children: [
-                  item('Start Time', reminder.startTime),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(
-                            height: 40,
-                            child: FutureBuilder<List<String>>(
-                              future: possibleRemindTime(), // async work
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<List<String>> snapshot) {
-                                switch (snapshot.connectionState) {
-                                  case ConnectionState.waiting:
-                                    return const CircularProgressIndicator();
-                                  default:
-                                    if (snapshot.hasError) {
-                                      return Text('Error: ${snapshot.error}');
-                                    } else {
-                                      return ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: snapshot.data!.length,
-                                          shrinkWrap: true,
-                                          itemBuilder: (context, index) {
-                                            return Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 8,
-                                                      horizontal: 15),
-                                              margin: EdgeInsets.fromLTRB(index==0?0:5, 5, index == snapshot.data!.length?5:0, 5),
-                                              decoration: BoxDecoration(
-                                                  color:
-                                                      scaffoldBackgroundLight,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0)),
-                                              child: Text(snapshot.data![index],
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                            );
-                                          });
-                                    }
-                                }
-                              },
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 18, 16, 120),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(<Widget>[
+                AppCard(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[
+                      brandPrimary.withValues(alpha: 0.14),
+                      brandSecondary.withValues(alpha: 0.10),
+                    ],
+                  ),
+                  borderColor: Colors.transparent,
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        height: 48,
+                        width: 48,
+                        decoration: BoxDecoration(
+                          color: brandPrimary.withValues(alpha: 0.16),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const Icon(
+                          Icons.notifications_active_rounded,
+                          color: brandPrimary,
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Next dose',
+                              style: theme.textTheme.labelSmall,
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              '${formatTimeOfDay(context, TimeOfDay(hour: next.hour, minute: next.minute))}'
+                              ' • ${countdownLabel(next.difference(DateTime.now()))}',
+                              style: displayStyle(17, color: brandPrimary),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 18),
+                SectionTitle('Medicine', color: accent),
+                AppCard(
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: InfoTile(
+                              label: 'Brand',
+                              value: reminder.medicine.brandName,
+                              icon: Icons.label_outline_rounded,
+                              color: accent,
                             ),
                           ),
-                          const Divider(),
-                          Text(
-                            'Possible Remind Time',
-                            style: TextStyle(fontSize: 11.sp),
-                          )
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: InfoTile(
+                              label: 'Strength',
+                              value: reminder.medicine.strength,
+                              icon: Icons.science_outlined,
+                              color: accent,
+                            ),
+                          ),
                         ],
                       ),
-                      margin: const EdgeInsets.all(8.0),
-                      padding: const EdgeInsets.all(15.0),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8.0)),
-                    ),
-                  )
-                ],
-              ),
-            ],
+                      const SizedBox(height: 14),
+                      Divider(color: scheme.outlineVariant),
+                      const SizedBox(height: 14),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: InfoTile(
+                              label: 'Form',
+                              value: reminder.medicine.formLabel,
+                              icon: Icons.category_outlined,
+                              color: accent,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: InfoTile(
+                              label: 'Company',
+                              value: reminder.medicine.companyName ?? '—',
+                              icon: Icons.factory_outlined,
+                              color: accent,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                      Divider(color: scheme.outlineVariant),
+                      const SizedBox(height: 14),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: InfoTile(
+                              label: 'Pack size',
+                              value: reminder.medicine.packsize,
+                              icon: Icons.inventory_2_outlined,
+                              color: accent,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: InfoTile(
+                              label: 'Price',
+                              value: reminder.medicine.priceLabel,
+                              icon: Icons.sell_outlined,
+                              color: accent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 18),
+                SectionTitle(
+                  'Daily schedule • ${schedule.length} doses',
+                  color: brandBlue,
+                ),
+                AppCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: schedule
+                            .map<Widget>((TimeOfDay t) {
+                              final bool isNext = t.hour == next.hour &&
+                                  t.minute == next.minute;
+                              return Pill(
+                                label: formatTimeOfDay(context, t),
+                                color: isNext ? brandAmber : brandBlue,
+                                icon: isNext
+                                    ? Icons.play_arrow_rounded
+                                    : Icons.schedule_rounded,
+                              );
+                            })
+                            .toList(),
+                      ),
+                      const SizedBox(height: 14),
+                      Divider(color: scheme.outlineVariant),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: <Widget>[
+                          const Icon(
+                            Icons.repeat_rounded,
+                            size: 15,
+                            color: brandBlue,
+                          ),
+                          const SizedBox(width: 7),
+                          Expanded(
+                            child: Text(
+                              'Every ${reminder.interval} hours, starting at '
+                              '${formatTimeOfDay(context, reminder.startTimeOfDay)}',
+                              style: theme.textTheme.bodySmall,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ]),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.fromLTRB(
+          16,
+          12,
+          16,
+          12 + MediaQuery.of(context).padding.bottom,
+        ),
+        decoration: BoxDecoration(
+          color: scheme.surface,
+          border: Border(top: BorderSide(color: scheme.outlineVariant)),
+        ),
+        child: OutlinedButton.icon(
+          onPressed: () => _confirmDelete(context),
+          icon: const Icon(Icons.delete_outline_rounded),
+          label: const Text('Delete this reminder'),
+          style: OutlinedButton.styleFrom(
+            foregroundColor: brandAccent,
+            side: BorderSide(color: brandAccent.withValues(alpha: 0.5)),
           ),
         ),
       ),
     );
   }
 
-  Widget item(String title, String value) {
-    return Expanded(
-      child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              value,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
-            ),
-            const Divider(),
-            Text(
-              title,
-              style: TextStyle(fontSize: 11.sp),
-            )
-          ],
+  Future<void> _confirmDelete(BuildContext context) async {
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Delete reminder?'),
+        content: Text(
+          'You will stop receiving notifications for '
+          '${reminder.medicine.displayName}.',
         ),
-        margin: const EdgeInsets.all(8.0),
-        padding: const EdgeInsets.all(15.0),
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(8.0)),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Keep it'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: FilledButton.styleFrom(backgroundColor: brandAccent),
+            child: const Text('Delete'),
+          ),
+        ],
       ),
     );
-  }
 
-  Future<List<String>> possibleRemindTime() async {
-    List<String> times = [];
+    if (confirmed != true) return;
 
-    String time =
-        time12to24Format(reminder.startTime).trim().replaceAll(':', '');
-    var hour = int.parse(time[0] + time[1]);
-    var ogValue = hour;
-    var minute = int.parse(time[2] + time[3]);
-    for (int i = 0; i < (24 / reminder.interval).floor(); i++) {
-      if ((hour + (reminder.interval * i) > 23)) {
-        hour = hour + (reminder.interval * i) - 24;
-      } else {
-        hour = hour + (reminder.interval * i);
-      }
-      DateTime tempDate = DateFormat("hh:mm").parse('$hour:$minute');
-      times.add(DateFormat("h:mm a").format(tempDate));
-      hour = ogValue;
-    }
-
-    return times;
+    final HomeController home = Get.find<HomeController>();
+    await home.deleteReminder(reminder);
+    if (Get.isOverlaysOpen) Get.back<void>();
+    Get.back<void>();
+    Get.snackbar(
+      'Reminder deleted',
+      'No more notifications for ${reminder.medicine.displayName}.',
+      snackPosition: SnackPosition.BOTTOM,
+      margin: const EdgeInsets.all(16),
+      borderRadius: 16,
+      duration: const Duration(seconds: 3),
+    );
   }
 }

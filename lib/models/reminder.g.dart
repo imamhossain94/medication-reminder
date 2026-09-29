@@ -21,13 +21,15 @@ class ReminderAdapter extends TypeAdapter<Reminder> {
       medicine: fields[1] as Medicine,
       startTime: fields[3] as String,
       interval: fields[2] as int,
+      // `id` was added after the first release; old records have no value here.
+      id: fields[4] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Reminder obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.notificationIDs)
       ..writeByte(1)
@@ -35,7 +37,9 @@ class ReminderAdapter extends TypeAdapter<Reminder> {
       ..writeByte(2)
       ..write(obj.interval)
       ..writeByte(3)
-      ..write(obj.startTime);
+      ..write(obj.startTime)
+      ..writeByte(4)
+      ..write(obj.id);
   }
 
   @override

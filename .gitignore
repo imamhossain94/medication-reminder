@@ -8,6 +8,7 @@
 .buildlog/
 .history
 .svn/
+Thumbs.db
 
 # IntelliJ related
 *.iml
@@ -15,10 +16,8 @@
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# Visual Studio Code
+.vscode/
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -44,3 +43,33 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# ---------------------------------------------------------------------------
+# Never commit machine specific or secret material — this repository is public.
+# ---------------------------------------------------------------------------
+
+# Android SDK path and Flutter SDK path (machine specific)
+android/local.properties
+**/local.properties
+
+# Signing material
+*.jks
+*.keystore
+key.properties
+android/key.properties
+google-services.json
+**/google-services.json
+service-account*.json
+
+# Environment files
+.env
+.env.*
+
+# Keystore / signing properties referenced from gradle
+android/app/google-services.json
+
+# OS noise
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini

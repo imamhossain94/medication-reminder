@@ -1,70 +1,66 @@
 name: medication_reminder
-description: A new Flutter project.
+description: "A beautiful, offline-friendly medication reminder app bundled with a searchable medicine database."
 
+publish_to: 'none'
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
-version: 1.0.0+1
+version: 1.1.0+2
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  flutter_native_splash: ^2.1.3+1
-  http: ^0.13.4
-  path_provider: ^2.0.9
-  dio: ^4.0.4
-  percent_indicator: ^4.0.0
-  webview_flutter: ^3.0.2
-  font_awesome_flutter: ^10.1.0
-  get: ^4.3.8
-  get_storage: ^2.0.3
-  intl: ^0.17.0
-  url_launcher: ^6.0.15
-  share: ^2.0.4
-  sizer: ^2.0.15
-  package_info: ^2.0.2
-  flutter_rating_bar: ^4.0.0
-  fluttertoast: ^8.0.9
-  sqflite: ^2.0.2
-  path: ^1.8.0
-  flutter_svg: ^1.0.3
-  flutter_local_notifications: ^9.4.0
-  hive: ^2.0.6
+  # Networking / storage
+  dio: ^5.7.0
+  sqflite: ^2.3.3
+  path: ^1.9.0
+  path_provider: ^2.1.4
+
+  # State management & local storage
+  get: ^4.6.6
+  get_storage: ^2.1.1
+  hive: ^2.2.3
   hive_flutter: ^1.1.0
-  flutter_staggered_grid_view: ^0.6.1
 
+  # Notifications
+  flutter_local_notifications: ^19.0.0
+  timezone: ^0.10.0
+  flutter_timezone: ^4.0.0
 
-  cupertino_icons: ^1.0.2
+  # Misc
+  intl: ^0.20.2
+  cupertino_icons: ^1.0.8
+  url_launcher: ^6.3.0
+  share_plus: ^12.0.0
+  package_info_plus: ^8.1.1
+  webview_flutter: ^4.10.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  hive_generator: ^1.1.2
-  build_runner: ^2.1.7
-  flutter_lints: ^1.0.0
-  #flutter packages pub run build_runner build
+  flutter_lints: ^5.0.0
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.13
 
 flutter:
   uses-material-design: true
 
-
   assets:
-    - assets/
-    - assets/form/
-    - assets/ic_launcher.png
+    - assets/fonts/
 
-
-flutter_native_splash:
-  # flutter pub run flutter_native_splash:create
-  # flutter pub run flutter_native_splash:remove
-
-  color: "#E3EBEC"
-  image: assets/ic_launcher.png
-  color_dark: "#212230"
-  image_dark: assets/ic_launcher.png
-  android_gravity: center
-  fullscreen: true
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+    - family: Fredoka
+      fonts:
+        - asset: assets/fonts/Fredoka-Variable.ttf

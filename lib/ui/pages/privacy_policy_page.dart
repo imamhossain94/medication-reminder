@@ -1,47 +1,106 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../utils/constants.dart';
+import '../../utils/errors.dart';
 
-class PrivacyPolicy extends StatelessWidget{
-  const PrivacyPolicy({Key? key}) : super(key: key);
+class PrivacyPolicyPage extends StatefulWidget {
+  const PrivacyPolicyPage({Key? key}) : super(key: key);
+
+  @override
+  State<PrivacyPolicyPage> createState() => _PrivacyPolicyPageState();
+}
+
+class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
+  late final Future<WebViewController?> _controller = _create();
+
+  Future<WebViewController?> _create() async {
+    try {
+      final WebViewController controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setNavigationDelegate(
+          NavigationDelegate(
+            onWebResourceError: (WebResourceError error) {
+              debugPrint('privacy policy load error: ${error.description}');
+            },
+          ),
+        )
+        ..loadRequest(Uri.parse(privacyPolicyUrl));
+      return controller;
+    } catch (e) {
+      debugPrint('WebView unavailable: $e');
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: const Text('Privacy policy'),
+        actions: <Widget>[
+          IconButton(
+            tooltip: 'Open in browser',
+            onPressed: () => launchUrl(
+              Uri.parse(privacyPolicyUrl),
+              mode: LaunchMode.externalApplication,
+            ),
+            icon: const Icon(Icons.open_in_new_rounded, size: 20),
+          ),
+        ],
+      ),
+      body: FutureBuilder<WebViewController?>(
+        future: _controller,
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<WebViewController?> snapshot,
+        ) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final WebViewController? controller = snapshot.data;
+          if (controller == null) {
+            return const _Fallback();
+          }
+          return WebViewWidget(controller: controller);
+        },
+      ),
+    );
+  }
+}
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: mainPageSystemOverlay(Theme.of(context).brightness),
-      child: SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            iconTheme: const IconThemeData(size: 22),
-            title: Text(
-              "Privacy Policy",
-              style: Theme.of(context).textTheme.headline3,
+class _Fallback extends StatelessWidget {
+  const _Fallback();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(28),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const Icon(Icons.cloud_off_rounded, size: 46),
+            const SizedBox(height: 16),
+            Text(
+              FriendlyError(
+                'The privacy policy needs a connection. You can also read it '
+                'in your browser.',
+              ).message,
+              textAlign: TextAlign.center,
             ),
-            titleSpacing: 0,
-            leading: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: const Icon(FontAwesomeIcons.arrowLeft)),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: WebView(
-                javascriptMode: JavascriptMode.unrestricted,
-                  initialUrl: privacyPolicyUrl,
-                onWebViewCreated: (WebViewController c) {},
+            const SizedBox(height: 18),
+            FilledButton(
+              onPressed: () => launchUrl(
+                Uri.parse(privacyPolicyUrl),
+                mode: LaunchMode.externalApplication,
               ),
+              child: const Text('Open in browser'),
             ),
-          ),
+          ],
         ),
       ),
     );

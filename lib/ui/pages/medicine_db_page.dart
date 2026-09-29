@@ -1,136 +1,207 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:medication_reminder/utils/extensions.dart';
 
-import '../../controller/controller.dart';
+import '../../controllers/medicine_db_controller.dart';
+import '../../models/medicine.dart';
+import '../../services/database_service.dart';
 import '../../utils/constants.dart';
-import '../components/medicine_card.dart';
+import '../widgets/common.dart';
+import '../widgets/medicine_tile.dart';
+import 'medicine_details_page.dart';
 import 'new_reminder_page.dart';
 
-class MedicineDbPage extends StatelessWidget {
-  MedicineDbPage({Key? key}) : super(key: key);
+class MedicineDbPage extends StatefulWidget {
+  const MedicineDbPage({Key? key}) : super(key: key);
 
-  final controller = Get.put(MedicineDbController(), permanent: false);
+  @override
+  State<MedicineDbPage> createState() => _MedicineDbPageState();
+}
+
+class _MedicineDbPageState extends State<MedicineDbPage> {
+  /// Registered here (and only here) so the controller is disposed together
+  /// with the page instead of being kept alive by the service locator.
+  final MedicineDbController controller = Get.put(MedicineDbController());
+
+  @override
+  void dispose() {
+    Get.delete<MedicineDbController>();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: mainPageSystemOverlay(Theme.of(context).brightness),
-      child: SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0.5,
-            backgroundColor: Colors.white,
-            iconTheme: const IconThemeData(
-              color: Colors.black,
+    final ColorScheme scheme = Theme.of(context).colorScheme;
+
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: const Text('Medicine library'),
+        titleTextStyle: Theme.of(context).textTheme.titleLarge,
+        actions: <Widget>[
+          IconButton(
+            tooltip: 'Search',
+            onPressed: controller.toggleSearch,
+            icon: Obx(
+              () => Icon(
+                controller.searching.value
+                    ? Icons.close_rounded
+                    : Icons.search_rounded,
+              ),
             ),
-            titleSpacing: 0,
-            title: Obx(() => !controller.isSearching.value
-                ? Text(
-                    "Medicine Database",
-                    style: Theme.of(context).textTheme.headline3,
-                  )
-                : TextField(
-                    controller: controller.searchTextController,
-                    autofocus: true,
-                    decoration: const InputDecoration(
-                      hintText: "Search Medicine...",
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(color: Colors.white30),
-                    ),
-                    style: const TextStyle(color: Colors.black, fontSize: 16.0),
-                    onChanged: (value) => controller.searchMedicine(value),
-                  )),
-            //centerTitle: true,
-            // leading: IconButton(
-            //     onPressed: controller.openDrawer,
-            //     icon: const Icon(
-            //       FontAwesomeIcons.bars,
-            //       size: 22,
-            //     )),
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    controller.toggleSearch();
-                  },
-                  icon: Obx(() => Icon(
-                        controller.isSearching.value
-                            ? FontAwesomeIcons.xmark
-                            : FontAwesomeIcons.magnifyingGlass,
-                        size: 22,
-                      )))
-            ],
           ),
-          body: Column(
-            children: [
-              Expanded(child: GetBuilder<MedicineDbController>(
-                init: controller,
-                global: false,
-                builder: (value) {
-
-                  if(value.medicineList.isEmpty){
-                    return emptyScreen('No Medicine Found');
-                  }else{
-                    return ListView.builder(
-                      controller: value.controller,
-                      itemCount: value.medicineList.length,
-                      itemBuilder: (context, index) {
-                        return MedicineCard(
-                          medicine: value.medicineList[index],
-                          onTap: () {
-                            Get.off(()=> NewReminderPage(), arguments: value.medicineList[index]);
+          const SizedBox(width: 6),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        heroTag: 'manual-entry',
+        onPressed: () => Get.to(() => const NewReminderPage()),
+        backgroundColor: scheme.primary,
+        foregroundColor: scheme.onPrimary,
+        icon: const Icon(Icons.edit_outlined),
+        label: const Text('Add manually'),
+      ),
+      body: Column(
+        children: <Widget>[
+          Obx(() {
+            if (!controller.searching.value) return const SizedBox.shrink();
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 10),
+              child: TextField(
+                controller: controller.searchController,
+                autofocus: true,
+                textInputAction: TextInputAction.search,
+                onChanged: controller.onSearchChanged,
+                decoration: InputDecoration(
+                  hintText: 'Search a brand or generic name…',
+                  prefixIcon: const Icon(Icons.search_rounded, size: 20),
+                  suffixIcon: controller.searchController.text.isEmpty
+                      ? null
+                      : IconButton(
+                          icon: const Icon(Icons.clear_rounded, size: 18),
+                          onPressed: () {
+                            controller.searchController.clear();
+                            controller.search('');
                           },
-                        );
-                      },
-                    );
-                  }
-
-                },
-              )),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Click on a medicine to continue',
-                        style: Theme.of(context).textTheme.headline6!.copyWith(
-                            color: const Color(0xFF172B4D)
                         ),
-                      ),
-                      TextSpan(
-                        text: ' or ',
-                        style: Theme.of(context).textTheme.bodyText2!,
-                      ),
-                      TextSpan(
-                        text: 'If you did not find your desire meds then click on',
-                        style: Theme.of(context).textTheme.headline6!.copyWith(
-                            color: const Color(0xFF172B4D)
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' here...',
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                          color: Colors.blueAccent
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Get.off(()=> NewReminderPage(), arguments: null);
-                        }
-                      ),
-                    ],
-                  ),
                 ),
               ),
-            ],
+            );
+          }),
+          Obx(
+            () => _ResultBar(
+              total: controller.total.value,
+              query: controller.query.value,
+              allCount: DatabaseService.instance.brandCount,
+            ),
           ),
-        ),
+          Expanded(
+            child: Obx(() {
+              if (controller.loading.value && controller.medicines.isEmpty) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (controller.medicines.isEmpty) {
+                return EmptyState(
+                  icon: Icons.search_off_rounded,
+                  title: 'No match',
+                  message: controller.query.value.isEmpty
+                      ? 'The medicine library is empty.'
+                      : 'Nothing matched "${controller.query.value}".\n'
+                          'Try a shorter word, or add the medicine manually.',
+                  color: brandAccent,
+                  action: FilledButton.icon(
+                    onPressed: () => Get.to(() => const NewReminderPage()),
+                    icon: const Icon(Icons.add_rounded),
+                    label: const Text('Add it manually'),
+                  ),
+                );
+              }
+
+              return NotificationListener<ScrollEndNotification>(
+                onNotification: (ScrollEndNotification n) {
+                  controller.loadMore();
+                  return false;
+                },
+                child: ListView.separated(
+                  controller: controller.scrollController,
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 110),
+                  itemCount: controller.medicines.length +
+                      (controller.loadingMore.value ? 1 : 0),
+                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index >= controller.medicines.length) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 18),
+                        child: Center(
+                          child: SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(strokeWidth: 2.4),
+                          ),
+                        ),
+                      );
+                    }
+                    final Medicine medicine = controller.medicines[index];
+                    return MedicineTile(
+                      key: ValueKey<String>(medicine.brandId),
+                      medicine: medicine,
+                      onTap: () => Get.to(
+                        () => MedicineDetailsPage(medicine: medicine),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }),
+          ),
+        ],
       ),
     );
   }
 }
+
+class _ResultBar extends StatelessWidget {
+  const _ResultBar({
+    required this.total,
+    required this.query,
+    required this.allCount,
+  });
+
+  final int total;
+  final String query;
+  final int allCount;
+
+  @override
+  Widget build(BuildContext context) {
+    final String label = query.isEmpty
+        ? '${_pretty(allCount)} brands in the library'
+        : '${_pretty(total)} result${total == 1 ? '' : 's'} for "$query"';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(18, 2, 18, 8),
+      child: Row(
+        children: <Widget>[
+          const Icon(Icons.info_outline_rounded, size: 14),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+          ),
+          Text(
+            medicineDbRepo,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static String _pretty(int n) {
+    if (n >= 1000) return '${(n / 1000).toStringAsFixed(1)}k';
+    return '$n';
+  }}

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// ---------------------------------------------------------------------------
+// App identity
+// ---------------------------------------------------------------------------
+
 const String appName = 'Medication Reminder';
-const String appLogo = 'images/ic_launcher.png';
+const String appTagline = 'Never miss a dose again';
+const String appLogo = 'assets/ic_launcher.png';
 
 const String developerName = 'Md. Imam Hossain';
 const String designerName = 'Md. Imam Hossain';
@@ -14,108 +19,160 @@ const String appLink =
     'https://play.google.com/store/apps/details?id=com.masleap.medication_reminder';
 const String storeLink =
     'https://play.google.com/store/apps/developer?id=NewAgeDevs';
-const String privacyPolicyUrl = 'https://medication-reminder-privay.blogspot.com/2022/04/medication-reminder-privacy-policy.html';
+const String privacyPolicyUrl =
+    'https://medication-reminder-privay.blogspot.com/2022/04/medication-reminder-privacy-policy.html';
 
-// Test ads unit id Google
-// const String idBanner = "ca-app-pub-3940256099942544/6300978111";
-// const String idInterstitial = "ca-app-pub-3940256099942544/1033173712";
+// ---------------------------------------------------------------------------
+// Medicine data attribution
+//
+// The bundled/offline medicine database is **not** created by this app.
+// It is downloaded from the open-source project below. Please keep this
+// attribution visible in the app (About / Medicine database screens) and in
+// the README whenever the data is redistributed.
+// ---------------------------------------------------------------------------
 
-// Real ads unit id Google
-// const String idBanner = "ca-app-pub-4061500537427923/9291376593";
-// const String idInterstitial = "ca-app-pub-4061500537427923/3272763158";
+/// Upstream repository the `medicine.db` file is pulled from at runtime.
+const String medicineDbOwner = 'WSAyan';
+const String medicineDbRepo = 'medicinedb';
+const String medicineDbBranch = 'main';
+const String medicineDbFileName = 'medicine.db';
+const String medicineDbRepoUrl =
+    'https://github.com/$medicineDbOwner/$medicineDbRepo';
+const String medicineDbLicense = 'MIT License';
+const String medicineDbAuthor = 'WSAyan';
 
-const scaffoldBackgroundLight = Color(0xFFF6F7F8);
-const scaffoldBackgroundDark = Color(0xFF212230);
-const backgroundLight = Color(0xFFFFFFFF);
-const backgroundDark = Color(0xFF323647);
-const colorButtonDisable = Color(0xFFB1BCD0);
-
-const colorOnPrimary = Color(0xFF010A1C);
-const colorSecondary = Color(0xFFFF2323);
-const colorOnSecondary = Color(0xFFFFFFFF);
-const colorOnPrimaryDark = Color(0xFFF8F8F8);
-const colorSecondaryDark = Color(0xFFFF2323);
-const colorOnSecondaryDark = Color(0xFFF8F8F8);
-
-SystemUiOverlayStyle mainPageSystemOverlay(Brightness brightness) =>
-    SystemUiOverlayStyle.light.copyWith(
-      systemNavigationBarColor: brightness == Brightness.dark
-          ? scaffoldBackgroundLight
-          : scaffoldBackgroundDark,
-      systemNavigationBarIconBrightness: brightness,
-      statusBarColor: brightness == Brightness.dark
-          ? scaffoldBackgroundLight
-          : scaffoldBackgroundDark,
-      statusBarBrightness: brightness,
-      statusBarIconBrightness: brightness,
-    );
-
-enum viewMode { list, grid }
-
-// Assets path
-const bandageSvg = 'assets/form/bandage.svg';
-const bottleSvg = 'assets/form/bottle.svg';
-const capsuleSvg = 'assets/form/capsule.svg';
-const creamSvg = 'assets/form/cream.svg';
-const dropsSvg = 'assets/form/drops.svg';
-const injectionSvg = 'assets/form/injection.svg';
-const powderSvg = 'assets/form/powder.svg';
-const soapSvg = 'assets/form/soap.svg';
-const spraySvg = 'assets/form/spray.svg';
-const suppositorySvg = 'assets/form/suppository.svg';
-const tabletsSvg = 'assets/form/tablets.svg';
-const unknownSvg = 'assets/form/unknown.svg';
-const emptySvg = 'assets/form/empty.svg';
-
-// Medicine form map
-const medicineForms = [
-  {'name': 'Bandage', 'path': bandageSvg},
-  {'name': 'Suspension', 'path': bottleSvg},
-  {'name': 'Capsule', 'path': capsuleSvg},
-  {'name': 'Gel/Cream', 'path': creamSvg},
-  {'name': 'Drops', 'path': dropsSvg},
-  {'name': 'Injection', 'path': injectionSvg},
-  {'name': 'Powder', 'path': powderSvg},
-  {'name': 'Soap', 'path': soapSvg},
-  {'name': 'Inhaler/Spray', 'path': spraySvg},
-  {'name': 'Suppository', 'path': suppositorySvg},
-  {'name': 'Tablet', 'path': tabletsSvg},
-  {'name': 'Unspecified', 'path': unknownSvg},
+/// Mirrors are tried in order until one of them delivers a valid database.
+const List<String> medicineDbMirrors = [
+  'https://raw.githubusercontent.com/$medicineDbOwner/$medicineDbRepo/$medicineDbBranch/$medicineDbFileName',
+  'https://cdn.jsdelivr.net/gh/$medicineDbOwner/$medicineDbRepo@$medicineDbBranch/$medicineDbFileName',
+  'https://github.com/$medicineDbOwner/$medicineDbRepo/raw/$medicineDbBranch/$medicineDbFileName',
 ];
 
-// Form possibility
-class FormPossibility {
-  static const bottle = [
-    'suspension',
-    'syrup',
-    'solution',
-    'emulsion',
-    'liquid',
-    'wash',
-    'rub',
-    'elixir'
-  ];
-  static const tablet = ['tablet', 'film'];
-  static const capsule = 'cap';
-  static const injection = [
-    'injection',
-    'saline',
-    'vaccine',
-    'infusion',
-    'kit'
-  ];
-  static const tube = [
-    'gel',
-    'ointment',
-    'cream',
-    'paste',
-    'shampoo',
-    'lotion'
-  ];
-  static const suppository = 'suppository';
-  static const drops = 'drops';
-  static const inhaler = ['inhalation', 'inhaler', 'spray'];
-  static const powder = ['powder', 'saline'];
-  static const bandage = ['bandage', 'patch'];
-  static const soap = 'bar';
+// ---------------------------------------------------------------------------
+// Brand palette
+// ---------------------------------------------------------------------------
+
+/// Primary – a friendly violet.
+const Color brandPrimary = Color(0xFF6C4CE0);
+const Color brandPrimaryDark = Color(0xFF4B31B4);
+const Color brandPrimarySoft = Color(0xFFEDE7FF);
+
+/// Secondary – fresh mint used for "taken / success" states.
+const Color brandSecondary = Color(0xFF00C2A8);
+const Color brandSecondarySoft = Color(0xFFDFF7F2);
+
+/// Accent – warm coral used for warnings and the FAB.
+const Color brandAccent = Color(0xFFFF6B6B);
+const Color brandAccentSoft = Color(0xFFFFE6E6);
+
+const Color brandAmber = Color(0xFFFFB020);
+const Color brandBlue = Color(0xFF3E8BFF);
+
+/// Splash gradient used on the loading screen and the home header.
+const List<Color> brandGradient = [
+  Color(0xFF7C4DFF),
+  Color(0xFF6C4CE0),
+  Color(0xFF00C2A8),
+];
+
+const scaffoldBackgroundLight = Color(0xFFF6F5FF);
+const scaffoldBackgroundDark = Color(0xFF141326);
+const surfaceLight = Color(0xFFFFFFFF);
+const surfaceDark = Color(0xFF1F1D36);
+
+// ---------------------------------------------------------------------------
+// System bars
+// ---------------------------------------------------------------------------
+
+SystemUiOverlayStyle systemOverlay(Brightness brightness) {
+  final bool isDark = brightness == Brightness.dark;
+  return SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+    statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+    systemNavigationBarColor: isDark ? scaffoldBackgroundDark : Colors.white,
+    systemNavigationBarIconBrightness:
+        isDark ? Brightness.light : Brightness.dark,
+    systemNavigationBarDividerColor: Colors.transparent,
+  );
 }
+
+// ---------------------------------------------------------------------------
+// Medicine forms
+// ---------------------------------------------------------------------------
+
+/// A medicine "form" (dosage form) with its own colour so the UI can stay
+/// colourful while still being scannable.
+class MedicineForm {
+  final String name;
+  final Color color;
+  final IconData icon;
+
+  const MedicineForm(this.name, this.color, this.icon);
+
+  /// Background tint for chips / badges.
+  Color get soft => color.withValues(alpha: 0.14);
+}
+
+/// The canonical list used by the "new reminder" form picker, in display order.
+const List<MedicineForm> medicineForms = [
+  MedicineForm('Tablet', Color(0xFF6C4CE0), Icons.medication_outlined),
+  MedicineForm('Capsule', Color(0xFF3E8BFF), Icons.medication_liquid_outlined),
+  MedicineForm('Suspension', Color(0xFF00C2A8), Icons.opacity_outlined),
+  MedicineForm('Injection', Color(0xFFFF6B6B), Icons.vaccines_outlined),
+  MedicineForm('Drops', Color(0xFF00B8D9), Icons.water_drop_outlined),
+  MedicineForm('Inhaler/Spray', Color(0xFFFFB020), Icons.air_outlined),
+  MedicineForm('Gel/Cream', Color(0xFFEC5F9E), Icons.face_outlined),
+  MedicineForm('Powder', Color(0xFF8E7CFF), Icons.blur_on_outlined),
+  MedicineForm('Soap', Color(0xFF34C77B), Icons.spa_outlined),
+  MedicineForm('Bandage', Color(0xFFFF7849), Icons.healing_outlined),
+  MedicineForm('Suppository', Color(0xFF9C6ADE), Icons.science_outlined),
+  MedicineForm('Unspecified', Color(0xFF8A8AA3), Icons.help_outline),
+];
+
+/// The default form (a reminder that has not been linked to the database).
+MedicineForm get defaultMedicineForm => medicineForms.last;
+
+/// Keywords found in the `form` column of the database, ordered from the most
+/// specific match to the least specific one.
+const Map<String, String> formKeywords = {
+  'capsule': 'Capsule',
+  'cap': 'Capsule',
+  'suppository': 'Suppository',
+  'drops': 'Drops',
+  'drop': 'Drops',
+  'eye drop': 'Drops',
+  'bar': 'Soap',
+  'tablet': 'Tablet',
+  'film': 'Tablet',
+  'sachet': 'Powder',
+  'powder': 'Powder',
+  'patch': 'Bandage',
+  'bandage': 'Bandage',
+  'inhalation': 'Inhaler/Spray',
+  'inhaler': 'Inhaler/Spray',
+  'spray': 'Inhaler/Spray',
+  'aerosol': 'Inhaler/Spray',
+  'injection': 'Injection',
+  'inj': 'Injection',
+  'saline': 'Injection',
+  'vaccine': 'Injection',
+  'infusion': 'Injection',
+  'im': 'Injection',
+  'iv': 'Injection',
+  'sc': 'Injection',
+  'gel': 'Gel/Cream',
+  'ointment': 'Gel/Cream',
+  'cream': 'Gel/Cream',
+  'paste': 'Gel/Cream',
+  'shampoo': 'Gel/Cream',
+  'lotion': 'Gel/Cream',
+  'suspension': 'Suspension',
+  'syrup': 'Suspension',
+  'solution': 'Suspension',
+  'emulsion': 'Suspension',
+  'liquid': 'Suspension',
+  'elixir': 'Suspension',
+  'wash': 'Suspension',
+  'rub': 'Suspension',
+};
